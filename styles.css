@@ -5,11 +5,13 @@
     --cor-3: #ffffff ;
 
     --fonte-principal: cooper hewitt;
+    --fonte-secundária: Poppins;
 }
 
 *{
     padding: 0px;
     margin: 0px;
+    box-sizing: border-box;
 }
 
 body{
