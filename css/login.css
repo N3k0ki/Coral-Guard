@@ -1,4 +1,4 @@
-@import url(/css/styles.css);
+@import url(/web/styles.css);
 body {
     background: linear-gradient(to bottom, var(--color-end), var(--color-start));
     height: 100vh;
