@@ -1,3 +1,4 @@
+import registrarEventosCadastro from "./registrarEventosCadastro.js";
 import io from "./servidor.js";
 
 io.on("connection", (socket) => { // Agora o socket está disponível aqui
@@ -6,6 +7,8 @@ io.on("connection", (socket) => { // Agora o socket está disponível aqui
     console.log(`Um cliente se conectou!
     ID: ${socket.id}
     data: ${dataHora}`); 
+
+    registrarEventosCadastro(socket, io)
 
     socket.on("selecionar_documento", async (nomeDocumento, devolverTexto) => {
         socket.join(nomeDocumento);
