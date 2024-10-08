@@ -1,41 +1,41 @@
-// criarconta.js
-const form = document.getElementById("form-cadastro");
+import { emitirCadastrarUsuario } from "./socket-front-cadastro.js"
 
-form.addEventListener("submit", (evento) => {
-  evento.preventDefault(); // Evita que o formulário recarregue a página
+document.addEventListener("DOMContentLoaded", () => {
+  const form = document.getElementById("form-cadastro");
 
-  const nome = form["user"].value;
-  const senha = form["senha"].value;
-  const email = form["email"].value;
+  form.addEventListener("submit", (evento) => {
+      evento.preventDefault(); // Evita que o formulário recarregue a página
 
-  console.log("cadastrado");
+      // Acessando os valores corretamente
+      const nome = form["user"].value;
+      const email = form["email"].value;
+      const senha = form["senha"].value;
 
-  // Crie um objeto com os dados do formulário
-  const dados = {
-    nome: usuario,
-    email: email,
-    senha: senha
-  };
+      // Verificação para garantir que os valores estão sendo capturados
+      console.log(`Nome: ${user}, Email: ${email}, Senha: ${senha}`);
 
-  emitirCadastrarUsuario({ nome, senha });
+      const dados = {
+          nome: nome,
+          email: email,
+          senha: senha
+      };
 
-  // Envie os dados para o servidor usando fetch (opcional)
-  fetch("http://localhost:3000/registrar", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify(dados)
-  })
-  .then(response => {
-    // Verifique se a resposta do servidor foi bem-sucedida
-    if (response.ok) {
-      alert("Usuário cadastrado com sucesso!");
-    } else {
-      alert("Erro ao cadastrar usuário.");
-    }
-  })
-  .catch(error => {
-    alert("Erro ao conectar com o servidor.");
+      fetch("http://localhost:3000/registrar", {
+          method: "POST",
+          headers: {
+              "Content-Type": "application/json"
+          },
+          body: JSON.stringify(dados)
+      })
+      .then(response => {
+          if (response.ok) {
+              alert("Usuário cadastrado com sucesso!");
+          } else {
+              alert("Erro ao cadastrar usuário.");
+          }
+      })
+      .catch(error => {
+          alert("Erro ao conectar com o servidor.");
+      });
   });
 });

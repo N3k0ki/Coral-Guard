@@ -1,7 +1,7 @@
 {
   "name": "coralguard",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "index.html",
   "type": "module",
   "dependencies": {
     "abbrev": "^1.1.1",
@@ -201,6 +201,7 @@
     "yallist": "^4.0.0"
   },
   "scripts": {
+    "start": "nodemon -e html -x http-server",
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "nodemon servidor/socket-back.js"
   },

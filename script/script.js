@@ -39,3 +39,4 @@ document.addEventListener("DOMContentLoaded", function () {
       observer.observe(block); // Observa todos os blocos com a classe .block
   });
 });
+
