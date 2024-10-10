@@ -19,17 +19,4 @@ document.addEventListener("DOMContentLoaded", () => {
           email: email,
           senha: senha
       };
-
-
-      .then(response => {
-          if (response.ok) {
-              alert("Usuário cadastrado com sucesso!");
-          } else {
-              alert("Erro ao cadastrar usuário.");
-          }
-      })
-      .catch(error => {
-          alert("Erro ao conectar com o servidor.");
-      });
   });
-});
