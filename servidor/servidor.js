@@ -24,7 +24,7 @@ servidorHttp.listen(porta, () => console.log(`Servidor escutando na porta ${port
 const io = new Server(servidorHttp);
 
 app.post("/registrar", (req, res) => {
-    const { nome, email, senha } = req.body;
+    const { user, email, senha } = req.body;
 
     console.log(`Usuário: ${nome}, Email: ${email}, Senha: ${senha}`);
 
