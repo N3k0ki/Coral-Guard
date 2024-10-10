@@ -12,7 +12,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const senha = form["senha"].value;
 
       // Verificação para garantir que os valores estão sendo capturados
-      console.log(`Nome: ${nome}, Email: ${email}, Senha: ${senha}`);
+      alert(`Nome: ${nome}, Email: ${email}, Senha: ${senha}`);
 
       const dados = {
           nome: nome,
