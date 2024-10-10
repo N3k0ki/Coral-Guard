@@ -20,13 +20,7 @@ document.addEventListener("DOMContentLoaded", () => {
           senha: senha
       };
 
-      fetch("http://localhost:3000/registrar", {
-          method: "POST",
-          headers: {
-              "Content-Type": "application/json"
-          },
-          body: JSON.stringify(dados)
-      })
+
       .then(response => {
           if (response.ok) {
               alert("Usuário cadastrado com sucesso!");
