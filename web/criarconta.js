@@ -7,7 +7,7 @@ document.addEventListener("DOMContentLoaded", () => {
       evento.preventDefault(); // Evita que o formulário recarregue a página
 
       // Acessando os valores corretamente
-      const nome = form["user"].value;
+      const nome = form["nome"].value;
       const email = form["email"].value;
       const senha = form["senha"].value;
 
