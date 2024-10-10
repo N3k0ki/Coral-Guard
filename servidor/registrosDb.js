@@ -1,7 +1,7 @@
 import { registrosColecao } from "./dbConnect.js"
 
-function cadastrarUsuarios({ nome, senha}){
-    return registrosColecao.insertOne({ nome , senha })
+function cadastrarUsuarios({ user, senha}){
+    return registrosColecao.insertOne({ user , senha })
 }
 
 export { cadastrarUsuarios };

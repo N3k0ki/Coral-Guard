@@ -26,10 +26,10 @@ const io = new Server(servidorHttp);
 app.post("/registrar", (req, res) => {
     const { user, email, senha } = req.body;
 
-    console.log(`Usuário: ${nome}, Email: ${email}, Senha: ${senha}`);
+    console.log(`Usuário: ${user}, Email: ${email}, Senha: ${senha}`);
 
     // Aqui você pode adicionar lógica para salvar no banco de dados ou fazer validações
-    if (nome && email && senha) {
+    if (user && email && senha) {
         res.status(200).send("Registro realizado com sucesso!");
     } else {
         res.status(400).send("Dados inválidos!");
