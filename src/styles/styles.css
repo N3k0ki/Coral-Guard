@@ -1,0 +1,21 @@
+:root {
+    --cor-1: #006cb5;
+    --cor-2: #0094f8;
+    --cor-3: #ffffff ;
+    --color-start: #ff7639; 
+    --color-end: #17649a;   
+    --password-link-color: #2ef7ff;
+
+    --fonte-principal: 'Cooper hewitt', sans-serif;
+    --fonte-secundária: 'Poppins', sans-serif;
+}
+
+*{
+    padding: 0px;
+    margin: 0px;
+    box-sizing: border-box;
+}
+
+body{
+    font-family: var(--fonte-principal);
+}

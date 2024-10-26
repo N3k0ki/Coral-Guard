@@ -1,0 +1,262 @@
+body {
+    background: url(../../assents/homepage.png) no-repeat;
+    background-size: cover;
+    min-height: 100vh;
+    background-attachment: fixed;
+}
+
+.container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: var(--cor-1);
+}
+
+.logo_container {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+}
+
+.src_logo {
+    height: 38px;
+    padding-right: 2px;
+}
+
+.tag_logo {
+    font-size: 20px;
+    color: var(--cor-3);
+}
+
+a {
+    text-decoration: none;
+    padding: 2px;
+    color: var(--cor-3);
+}
+
+.links_container {
+    padding: 10px;
+}
+
+.login {
+    background-color: var(--cor-2);
+    border-radius: 26px;
+    padding: 4px 17px;
+}
+
+.container_home {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.title {
+    font-size: 24px;
+    font-family: var(--fonte-secundária);
+    color: var(--cor-3);
+    font-weight: bold;
+    text-align: center;
+    padding: 1em;
+}
+
+.subtitle {
+    font-size: 20px;
+    color: var(--cor-3);
+    text-align: center;
+    padding: 1.5em;
+}
+
+.carrossel {
+    width: 100%;
+    overflow: hidden;
+    max-width: 300px;
+    /* Adjust width */
+    position: relative;
+}
+
+#img {
+    display: flex;
+    transition: transform 0.5s ease-in-out;
+    /* Smooth animation */
+}
+
+#img img {
+    min-width: 100%;
+    object-fit: cover;
+    /* Adjust image scaling */
+}
+
+.container_carrossel {
+    display: flex;
+    transition: transform 0.5s ease-in-out;
+    transform: translateX(0);
+}
+
+.src_img {
+    min-width: 100%;
+    object-fit: cover;
+    width: 100%;
+    /* A largura da imagem ocupa toda a área do carrossel */
+}
+
+.container_block {
+    padding: 3rem;
+    text-align: center;
+}
+
+.block {
+    background-color: var(--cor-1);
+    padding: 1.5rem 1rem;
+    border-radius: 16px;
+    border: 2px solid white;
+    opacity: 0;
+    transition: 0.5s ease-in-out, transform 0.5s ease-in-out;
+    transform: translateX(20px);
+    /* Start with a small downward shift */
+}
+
+.hidden {
+    opacity: 0
+}
+
+.block.show {
+    opacity: 1;
+    /* Visible when intersecting */
+    transform: translateY(0);
+    /* Reset the position */
+}
+
+.question_title {
+    font-size: 24px;
+    font-family: var(--fonte-secundária);
+    font-weight: bold;
+    margin-bottom: 10px;
+    color: var(--cor-3);
+}
+
+.txt {
+    font-size: 15px;
+    color: var(--cor-3);
+    font-family: var(--fonte-secundária);
+}
+
+/* Animação personalizada */
+.fade-in {
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out;
+}
+
+.fade-out {
+    opacity: 1;
+    transition: opacity 0.5s ease-in-out;
+}
+
+.txt_block {
+    padding: 3rem 0;
+}
+
+.highlight {
+    color: #ff6019;
+    /* Destaca o Coral Guard em laranja */
+    font-weight: bold;
+}
+
+.mergulhador {
+    padding-top: 1em;
+    width: 15rem;
+}
+
+.coral {
+    width: 13em;
+}
+
+#block {
+    padding: 1.5rem 1rem 0 1em;
+}
+
+.txt_final {
+    color: var(--cor-3);
+    font-size: 20px;
+}
+
+.footer {
+    background-color: #13537d;
+    padding: 1rem;
+    color: var(--cor-3);
+}
+
+.footer-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    text-align: center;
+    align-items: flex-start;
+    text-align: left;
+}
+
+.footer-col {
+    margin-bottom: 1rem;
+}
+
+.contact-section {
+    align-items: center;
+    text-align: center;
+}
+
+.logo-section .footer-logo {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.logo-img {
+    width: 50px;
+    height: 50px;
+}
+
+.footer-title {
+    font-size: 18px;
+    font-weight: bold;
+    margin-top: 0.5rem;
+}
+
+.footer-info p {
+    margin: 0.2rem 0;
+}
+
+.contact-section {
+    margin-top: 7em;
+}
+
+.contact-section .footer-links {
+    gap: 1rem;
+}
+
+.footer-link img {
+    width: 25px;
+    height: 25px;
+}
+
+.contact-btn {
+    text-decoration: none;
+    color: var(--cor-3);
+    background-color: var(--cor-1);
+    border-radius: 26px;
+    padding: 4px 35px;
+    margin-top: 1rem;
+    font-size: 15px;
+}
+
+.text-footer {
+    font-family: var(--fonte-secundária);
+    font-size: 1em;
+    font-weight: bold;
+}
+
+.copyright {
+    margin-top: 1rem;
+    font-size: 12px;
+}
