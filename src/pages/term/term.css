@@ -1,0 +1,170 @@
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.terms-body {
+  background-color: #3476a2;
+  color: #fff;
+  font-family: var(--fonte-principal);
+}
+
+.header-section {
+  background-color: #3476a2;
+  padding: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  flex-direction: column;
+}
+
+.header-content {
+  display: flex;
+  align-items: center;
+
+}
+
+.header-image {
+  max-width: 80%;
+  height: 40px;
+}
+
+.header-text {
+  color: #fff;
+  font-size: 1.5em;
+}
+
+.divider-line {
+  height: 2px;
+  background-color: #13537d;
+  width: 100%;
+}
+
+/* Estilo da section */
+.blue-section {
+  padding: 20px;
+  text-align: center;
+}
+
+.terms {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.terms-title {
+  font-size: 1.8em;
+  font-weight: bold;
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+.terms-subtitle {
+  font-size: 1.2em;
+  text-align: center;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  font-weight: bold;
+}
+
+.checkbox-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  margin-top: 20px;
+  /* Espaço para separação do restante do conteúdo */
+}
+
+.checkbox-container input[type="checkbox"] {
+  margin-right: 10px;
+  /* Espaço entre a checkbox e o texto */
+}
+
+.term-label {
+  font-size: 12px; /* Diminui o tamanho do texto */
+ /* Cor mais clara para o texto (opcional) */
+}
+
+.term-container {
+  max-width: 600px;
+  /* Largura máxima para centralizar o conteúdo */
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.term-highlight {
+  color: #ff6600;
+  /* Cor laranja para o destaque */
+  font-weight: bold;
+  font-size: 1.1em;
+  margin-bottom: 5px;
+  text-align: center;
+}
+
+.term-text {
+  font-size: 0.9em;
+  text-align: center;
+}
+
+.term-role {
+  color: #ff6600;
+  /* Cor laranja para os papéis */
+  font-weight: bold;
+}
+
+.term_left {
+  font-size: 0.9em;
+  margin: 10px 0;
+}
+
+.footer-section {
+  padding: 20px; /* Espaçamento interno */
+  text-align: center; /* Centraliza o texto horizontalmente */
+  font-size: 14px; /* Tamanho do texto */
+}
+
+.footer-text {
+  margin: 0; /* Remove a margem padrão do parágrafo */
+}
+
+.continue-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px; /* Espaçamento entre o checkbox e o botão */
+}
+
+/* Estilo para o link "Continuar" */
+.continue-link {
+  background-color: #ff6600; /* Fundo laranja */
+  color: white; /* Cor do texto */
+  padding: 10px 20px; /* Espaçamento interno */
+  border-radius: 16px; /* Bordas arredondadas */
+  text-decoration: none; /* Remove o sublinhado */
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  display: inline-block;
+  text-align: center;
+}
+
+/* Estilo para a mensagem de erro */
+.error-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 10px; /* Espaçamento entre o checkbox e a mensagem de erro */
+}
+
+.error-message {
+  color: red;
+  font-size: 12px;
+  text-align: center;
+}
+@media (min-width: 768px) {
+  .term-label {
+      font-size: 16px; /* Tamanho do texto para telas maiores */
+  }
+}

@@ -61,7 +61,7 @@ function Login() {
 
                             if (usuarioDb.senha == usuario.senha) {
                                 //Concluir login
-                                navigate('/')
+                                navigate('/terms')
                             } else {
                                 //Senha incorreta
                             }
@@ -71,7 +71,7 @@ function Login() {
                     }}>Entrar</p>
                     <p className="register_prompt">
                         Precisando de uma conta?
-                        <p onClick={() => { navigate('/register') }} className="register_link">Registre-se</p>
+                        <p onClick={() => { navigate('/terms') }} className="register_link">Registre-se</p>
                     </p>
                 </div>
             </footer>

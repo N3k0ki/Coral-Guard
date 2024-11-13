@@ -1,9 +1,13 @@
-import { Home } from './pages/home/home'
+import { Home } from './pages/home/home';
 import Login from './pages/login/login';
 import { Register } from './pages/register/register';
+import { Terms } from './pages/term/terms';
+import { Inicio } from './pages/inicio/inicio'
 
 export const routes = [
     { path: '/', element: <Home /> },
     { path: '/register', element: <Register /> },
-    { path: '/login', element: <Login />}
+    { path: '/login', element: <Login />},
+    { path: '/terms', element: <Terms />},
+    { path: '/inicio', element: <Inicio />}
 ];

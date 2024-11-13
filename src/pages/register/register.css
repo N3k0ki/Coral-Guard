@@ -108,6 +108,10 @@
     text-decoration: none;
     text-align: left;
     display: block;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
 }
 
 .password_link:hover {
