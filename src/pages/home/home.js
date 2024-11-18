@@ -80,11 +80,6 @@ export function Home() {
                     </div>
                     <div className="links_container">
                         <p className="login" onClick={async () => {
-                            /*const provider = new GoogleAuthProvider()
-                            const userCredential = await signInWithPopup(auth, provider)
-
-                            console.log(userCredential)*/
-
                             navigate('/login')
                         }}>Login</p>
                         <p className="create" onClick={() => navigate('/register')}>Criar Conta</p>

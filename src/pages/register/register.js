@@ -15,6 +15,7 @@ export function Register({ setUsuario }) {
 
             // Atualiza o estado 'usuario' global após o cadastro
             setUsuario(usuario); // Atualizando o estado no componente pai (Main.js)
+            localStorage.setItem('usuarioNome', usuario.name);
         }
     };
 

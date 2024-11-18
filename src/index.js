@@ -14,12 +14,10 @@ function Main() {
         <HashRouter>
             <Routes>
                 {routes.map((route) => {
-                    // Passa o estado usuario e a função setUsuario como props
                     return (
                         <Route
-                            key={route.path} // Adiciona a chave única
+                            key={route.path} 
                             path={route.path}
-                            // Passa `usuario` e `setUsuario` como props para o componente
                             element={React.cloneElement(route.element, { usuario, setUsuario })}
                         />
                     );

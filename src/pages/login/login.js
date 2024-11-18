@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import '../register/register.css';
 import logo from '../../assents/logo.svg';
 import { doc, getDoc } from 'firebase/firestore';
@@ -7,9 +7,14 @@ import { useNavigate } from 'react-router-dom';
 
 function Login() {
     const [usuario, setUsuario] = useState({})
-    const [usuarioDb, setUsuarioDb] = useState({})
-
     const navigate = useNavigate()
+
+    useEffect(() => {
+        const storedUser = localStorage.getItem('usuario');
+        if (storedUser) {
+            navigate('/terms');
+        }
+    }, [navigate]);
 
     return (
         <main className='reg-body'>
@@ -31,7 +36,7 @@ function Login() {
                     <input type="email" id="email" name="email" placeholder="Digite seu e-mail" required
                         onChange={(e) => {
                             usuario['email'] = e.target.value
-                            setUsuario(usuario)
+                            setUsuario({ ...usuario, email: e.target.value })
                         }}
                     />
                 </div>
@@ -40,44 +45,44 @@ function Login() {
                     <input type="password" id="password" name="password" placeholder="Digite sua senha" required
                         onChange={(e) => {
                             usuario['senha'] = e.target.value
-                            setUsuario(usuario)
+                            setUsuario({ ...usuario, senha: e.target.value })
                         }}
                     />
                 </div>
                 <div className="forgot_password">
-                    <a className="password_link">Esqueceu sua senha?</a>
+                    <a href="#" className="password_link">Esqueceu sua senha?</a>
                 </div>
             </section>
             <footer>
                 <div className="action_section">
                     <p className="enter_button" onClick={async () => {
-                        // Verificação a partir daqui
                         if (usuario.email && usuario.senha) {
                             const referencia = doc(db, 'Usuarios', usuario.email)
                             const snapshot = await getDoc(referencia)
 
-                            if (!snapshot.data()) return; //Usuário inexistente
-                            setUsuarioDb(snapshot.data())
-
-                            if (usuarioDb.senha == usuario.senha) {
-                                //Concluir login
-                                navigate('/terms')
-                            } else {
-                                //Senha incorreta
+                            if (!snapshot.exists()) {
+                                alert("Usuário inexistente");
+                                return;
                             }
-
-
+                            const usuarioDb = snapshot.data();
+                            
+                            if (usuarioDb.senha === usuario.senha) {
+                                navigate('/terms');
+                            } else {
+                                alert("Senha incorreta");
+                            }
+                        } else {
+                            alert("Por favor, preencha todos os campos");
                         }
                     }}>Entrar</p>
                     <p className="register_prompt">
                         Precisando de uma conta?
-                        <p onClick={() => { navigate('/terms') }} className="register_link">Registre-se</p>
+                        <span onClick={() => { navigate('/terms') }} className="register_link"> Registre-se</span>
                     </p>
                 </div>
             </footer>
         </main>
     )
-
 }
 
 export default Login;

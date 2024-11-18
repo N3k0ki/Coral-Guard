@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react'; // Importando useState e useEffect
 import { Link } from 'react-router-dom';
 import './inicio.css';
 import logo from '../../assents/logo.svg';
@@ -7,6 +7,23 @@ import addIcon from '../../assents/adicionar.png';
 import profileIcon from '../../assents/profile.png';
 
 export function Inicio({ usuario }) {
+    const [usuarioLocal, setUsuarioLocal] = useState({ name: '' });
+
+    useEffect(() => {
+        // Caso o usuario prop esteja vazio, buscamos no localStorage
+        if (usuario && usuario.name) {
+            setUsuarioLocal({ name: usuario.name });
+            localStorage.setItem('usuarioNome', usuario.name); // Armazenar o nome no localStorage
+        } else {
+            const nomeUsuario = localStorage.getItem('usuarioNome');
+            if (nomeUsuario) {
+                setUsuarioLocal({ name: nomeUsuario });
+            }
+        }
+    }, [usuario]); // Esse efeito será disparado sempre que a prop `usuario` mudar
+
+    const nomeUsuario = usuarioLocal.name || 'Visitante'; // Se o nome não for encontrado, exibe 'Visitante'
+
     return (
         <div className="home-body">
             <header className="header-home">
@@ -22,7 +39,7 @@ export function Inicio({ usuario }) {
             <section className="centered-container">
                 <div className="centered-container__item centered-container__item--bold">
                     <p className="text-home">
-                        <strong>Bem-vindo(a), {usuario.name || "usuário"}!</strong>
+                        <strong>Bem-vindo(a), {nomeUsuario}!</strong>
                     </p>
                 </div>
                 <div className="centered-container__item centered-container__item--bordered">
