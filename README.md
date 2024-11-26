@@ -1,70 +1,63 @@
-# Getting Started with Create React App
+# 🐠 **Coral Guard** 🌊
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+**Coral Guard** é um projeto dedicado à preservação dos corais e à conscientização sobre a saúde dos oceanos. A plataforma permite que os usuários registrem e compartilhem dados sobre os corais, incentivando ações para proteger esses ecossistemas vitais. 🌍💚
 
-## Available Scripts
+## 🚀 **Funcionalidades**
 
-In the project directory, you can run:
+- **🔒 Autenticação de Usuários**: Faça login ou crie uma conta usando o Firebase Authentication.
+- **🗺️ Mapeamento de Corais**: Registre a condição dos corais (saudáveis, levemente branqueados, etc.), com imagens e localização.
+- **🌐 Visualização de Dados**: Exibição interativa de postagens públicas em um mapa.
+- **👍 Socialização**: Curtidas, comentários e compartilhamentos das postagens.
+- **💾 Armazenamento Seguro**: Todos os dados são armazenados de forma segura no Firebase Firestore e Firebase Storage.
 
-### `npm start`
+## 🛠️ **Tecnologias Usadas**
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+- **Frontend**: 
+  - **React.js** ⚛️
+  - **Firebase** (Auth, Firestore, Storage) 🔥
+  - **React Router** 🚗
+- **Backend**:
+  - **Firebase Functions** (opcional) ⚙️
+  - **Firebase Realtime Database** ou **Firestore** 📊
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## 📝 **Instalação**
 
-### `npm test`
+Siga os passos abaixo para rodar o projeto localmente:
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### 1️⃣ **Clonar o repositório**:
 
-### `npm run build`
+```bash```
+git clone https://github.com/seuusuario/coral-guard.git
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+### 2️⃣ ** Instalar dependências:**
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+No diretório do projeto, execute:
+npm install
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+### 3️⃣ **Configurar o Firebase:**
 
-### `npm run eject`
+Crie um projeto no Firebase Console.
+Adicione o arquivo de configuração do Firebase (firebaseConfig.js) na pasta src com as credenciais da sua conta Firebase.
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+### 4️⃣ **Executar o projeto:**
+Para rodar o projeto localmente, execute:
+npm start
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+Isso iniciará o servidor de desenvolvimento e abrirá o site no navegador.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+## 📂 **Estrutura do Projeto**
+📂 Aqui está a estrutura básica do projeto
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+/coral-guard
+  /public
+    index.html          # Página HTML principal
+  /src
+    /assets             # Imagens e recursos estáticos
+    /firebase           # Arquivos de configuração do Firebase
+    /pages              # Páginas React
+    /styles             # Estilos globais (CSS)
+    _routes.js          # Componente principal
+    index.js            # Rotas dinâmicas usando HashRouter
 
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+## 🤝 **Contribuição**
+Contribuições são bem-vindas!
