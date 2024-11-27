@@ -7,8 +7,7 @@ import addIcon from '../../assents/adicionar.png';
 import profileIcon from '../../assents/profile.png';
 import { db, storage } from '../../firebase/firebase.js';
 import { collection, getDocs } from 'firebase/firestore';
-import './inicio.css';
-import { getStorage, ref, uploadBytes } from 'firebase/storage';
+import { getDownloadURL, ref } from 'firebase/storage';
 
 export function Inicio({ usuario }) {
     const [usuarioLocal, setUsuarioLocal] = useState({ name: '' });
@@ -31,6 +30,20 @@ export function Inicio({ usuario }) {
             }
         }
 
+        const downloadFile=async(fileId) => {
+            if (!fileId) return;
+        
+            const storageRef = ref(storage, `files/${fileId}`);
+            try {
+              // Get the download URL
+              const downloadURL = await getDownloadURL(storageRef);
+              console.log("File available at", downloadURL);
+              return downloadURL;
+            } catch (error) {
+              console.error("Download failed", error);
+            }
+          }
+
         // Buscar posts do Firestore
         const fetchPosts = async () => {
             const postsCollection = collection(db, 'coralRecords');
@@ -40,6 +53,7 @@ export function Inicio({ usuario }) {
                 ...doc.data(),
             }));
             setPosts(postsList);
+            downloadFile('roblox')
         };
 
         fetchPosts();
@@ -69,10 +83,6 @@ export function Inicio({ usuario }) {
                     <p className="text-map">Comece a mapear</p>
                 </div>
             </section>
-            <div>
-                <input type="file" accept="image/*" onChange={handleFileChange} />
-                <button onClick={handleUpload}>Enviar Imagem</button>
-            </div>
 
             <div className="line-home"></div>
 

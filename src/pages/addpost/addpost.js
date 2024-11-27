@@ -1,6 +1,7 @@
 import React, { useState } from "react";
-import { db } from "../../firebase/firebase"; // Certifique-se de que o Firebase foi configurado
-import { collection, addDoc } from "firebase/firestore"; // Para adicionar dados ao Firestore
+import { db, storage } from "../../firebase/firebase"; // Certifique-se de que o Firebase foi configurado
+import { doc, setDoc } from "firebase/firestore"; // Para adicionar dados ao Firestore
+import { ref, uploadBytesResumable, } from "firebase/storage";
 import './addpost.css';
 
 export function CoralForm() {
@@ -25,6 +26,7 @@ export function CoralForm() {
         }));
     };
 
+
     const handleRadioChange = (e) => {
         const { value } = e.target;
         setFormData((prevData) => ({
@@ -35,36 +37,45 @@ export function CoralForm() {
 
     const handleImageChange = (e) => {
         const file = e.target.files[0];
-        if (file) {
-            setFormData((prevData) => ({
-                ...prevData,
-                image: URL.createObjectURL(file),
-            }));
-        } else {
-            setFormData((prevData) => ({
-                ...prevData,
-                image: null,
-            }));
-        }
+        setFormData((prevData) => ({
+            ...prevData,
+            image: file,
+        }));
     };
+
+    const uploadFile = async (fileId, file) => {
+        if (!file) return;
+
+        const storageRef = ref(storage, `files/${fileId}`);
+        await uploadBytesResumable(storageRef, file);
+    }
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         setLoading(true);
+        const date = new Date()
+        const id = date.getTime()
 
         try {
-            const formCollection = collection(db, "coralRecords");
+            const formRef = doc(db, "coralRecords", id.toString());
 
             // Envia os dados para o Firestore
-            await addDoc(formCollection, {
+            await setDoc(formRef, {
                 date: formData.date,
                 location: formData.location,
                 reference: formData.reference,
                 temperature: formData.temperature,
                 status: formData.status,
-                observations: formData.observations,
-                image: formData.image,
+                observations: formData.observations
             });
+
+            try {
+                // Envia o arquivo para o banco de dados
+                await uploadFile(id, formData.image)
+
+            } catch (e) {
+                console.log(e)
+            }
 
             // Exibe a mensagem de sucesso
             setSuccessMessage(true);
@@ -93,7 +104,7 @@ export function CoralForm() {
         <div className="container coral-form-container">
             <form className="coral-form" onSubmit={handleSubmit}>
                 <h1 className="coral-form-title">🌊 Registro de Monitoramento Coral</h1>
-                
+
                 <div className="form-group coral-form-group">
                     <label htmlFor="date" className="form-label">Data</label>
                     <input
@@ -173,13 +184,12 @@ export function CoralForm() {
                     <label className="form-label">Imagem do Coral</label>
                     <div
                         id="imagePreview"
-                        className={`image-preview coral-image-preview ${
-                            formData.image ? "" : "empty"
-                        }`}
+                        className={`image-preview coral-image-preview ${formData.image ? "" : "empty"
+                            }`}
                     >
                         {formData.image ? (
                             <img
-                                src={formData.image}
+                                src={URL.createObjectURL(formData.image)}
                                 alt="Preview da imagem do coral"
                                 className="preview-image"
                             />
@@ -192,8 +202,8 @@ export function CoralForm() {
                             type="file"
                             id="imageInput"
                             className="file-input"
-                            accept="image/*"
-                            onChange={handleImageChange}
+                            // accept="image/*"
+                            onChange={(e) => { handleImageChange(e) }}
                         />
                         Escolher Imagem
                     </label>
