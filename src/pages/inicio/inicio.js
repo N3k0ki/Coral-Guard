@@ -114,7 +114,7 @@ export function Inicio({ usuario }) {
             <footer className="fixed-bar">
                 <div
                     className="icon-link"
-                    onClick={() => handleNavigation("/pagina1")}
+                    onClick={() => handleNavigation("/biblioteca")}
                     role="button"
                     tabIndex={0}
                 >
