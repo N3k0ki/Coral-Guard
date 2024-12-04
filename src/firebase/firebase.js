@@ -12,7 +12,8 @@ const firebaseConfig = {
   storageBucket: "coral-guard.appspot.com",
   messagingSenderId: "527306576350",
   appId: "1:527306576350:web:536023b5ce97d8cbb24d4f",
-  measurementId: "G-NHTGMMN6JF"
+  measurementId: "G-NHTGMMN6JF",
+  storageBucket: 'Coral-Guard'
 };
 
 // Inicializa o Firebase
