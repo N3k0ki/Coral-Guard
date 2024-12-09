@@ -1,20 +1,30 @@
 import React, { useState } from 'react';
-import './register.css'; // Arquivo CSS
-import logo from '../../assents/logo.svg'; // Importe da logo
+import './register.css';
+import logo from '../../assents/logo.svg';
 import { Link, useNavigate } from 'react-router-dom';
 import { doc, setDoc } from 'firebase/firestore';
 import { db } from '../../firebase/firebase';
 
 export function Register({ setUsuario }) {
-    const [usuario, setLocalUsuario] = useState({ name: '', email: '', senha: '' });
+    const [usuario, setLocalUsuario] = useState({
+        name: '',
+        email: '',
+        senha: '',
+    });
 
     const enviar = async () => {
         if (usuario.name && usuario.email && usuario.senha) {
             const referencia = doc(db, 'Usuarios', usuario.email);
-            await setDoc(referencia, usuario);
 
-            // Atualiza o estado 'usuario' global após o cadastro
-            setUsuario(usuario); // Atualizando o estado no componente pai (Main.js)
+            // Define o tipo de perfil como "cliente" por padrão
+            await setDoc(referencia, {
+                ...usuario,
+                tipo: 'cliente', // Perfil padrão
+                criadoEm: new Date(), // Data de criação
+            });
+
+            // Atualiza o estado global
+            setUsuario(usuario);
             localStorage.setItem('usuarioNome', usuario.name);
         }
     };
@@ -122,4 +132,3 @@ export function Register({ setUsuario }) {
         </div>
     );
 }
-

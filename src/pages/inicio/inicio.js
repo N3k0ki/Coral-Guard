@@ -18,11 +18,15 @@ export function Inicio({ usuario }) {
         navigate(path);
     };
 
+    const handleLogout = () => {
+        localStorage.clear(); // Remove o nome do usuário do localStorage
+        navigate('/'); // Redireciona para a tela inicial
+    };
+
     useEffect(() => {
-        // Caso o usuario prop esteja vazio, buscamos no localStorage
         if (usuario && usuario.name) {
             setUsuarioLocal({ name: usuario.name });
-            localStorage.setItem('usuarioNome', usuario.name); // Armazenar o nome no localStorage
+            localStorage.setItem('usuarioNome', usuario.name);
         } else {
             const nomeUsuario = localStorage.getItem('usuarioNome');
             if (nomeUsuario) {
@@ -30,21 +34,19 @@ export function Inicio({ usuario }) {
             }
         }
 
-        const downloadFile=async(fileId) => {
+        const downloadFile = async (fileId) => {
             if (!fileId) return;
-        
+
             const storageRef = ref(storage, `files/${fileId}`);
             try {
-              // Get the download URL
-              const downloadURL = await getDownloadURL(storageRef);
-              console.log("File available at", downloadURL);
-              return downloadURL;
+                const downloadURL = await getDownloadURL(storageRef);
+                console.log("File available at", downloadURL);
+                return downloadURL;
             } catch (error) {
-              console.error("Download failed", error);
+                console.error("Download failed", error);
             }
-          }
+        };
 
-        // Buscar posts do Firestore
         const fetchPosts = async () => {
             const postsCollection = collection(db, 'coralRecords');
             const snapshot = await getDocs(postsCollection);
@@ -53,13 +55,13 @@ export function Inicio({ usuario }) {
                 ...doc.data(),
             }));
             setPosts(postsList);
-            downloadFile('roblox')
+            downloadFile('roblox');
         };
 
         fetchPosts();
-    }, [usuario]); // Atualiza sempre que o `usuario` mudar
+    }, [usuario]);
 
-    const nomeUsuario = usuarioLocal.name || 'Visitante'; // Se o nome não for encontrado, exibe 'Visitante'
+    const nomeUsuario = usuarioLocal.name || 'Visitante';
 
     return (
         <div className="home-body">
@@ -69,6 +71,9 @@ export function Inicio({ usuario }) {
                         <img src={logo} alt="Logo Coral Guard" className="src-home" />
                         <p className="tag-home">Coral Guard</p>
                     </div>
+                    <button className="logout-button" onClick={handleLogout}>
+                        Logout
+                    </button>
                 </div>
             </header>
 
@@ -86,7 +91,6 @@ export function Inicio({ usuario }) {
 
             <div className="line-home"></div>
 
-            {/* Exibindo os posts do banco de dados */}
             <section className="posts-section">
                 {posts.length > 0 ? (
                     posts.map((post) => (
