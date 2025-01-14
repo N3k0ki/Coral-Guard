@@ -29,16 +29,24 @@ function Login() {
             const usuarioDb = snapshot.data();
 
             if (usuarioDb.senha === usuario.senha) {
-                const tipo = usuarioDb.tipo || 'comum'; // Verifica o tipo de usuário no Firestore
+                const tipo = usuarioDb.tipo || 'cliente'; // Verifica o tipo de usuário no Firestore
 
                 // Salva o usuário localmente
                 localStorage.setItem('usuario', JSON.stringify(usuarioDb));
 
                 // Redireciona para a página com base no tipo
-                if (tipo === 'administrador') {
-                    navigate('/admin');
-                } else {
-                    navigate('/cliente');
+                switch (tipo) {
+                    case 'adm':
+                        navigate('/admin');
+                        break;
+                    case 'mod':
+                        navigate('/moderador');
+                        break;
+                    case 'org':
+                        navigate('/organizacoes');
+                        break;
+                    default: // cliente
+                        navigate('/inicio');
                 }
             } else {
                 alert("Senha incorreta");

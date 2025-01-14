@@ -13,9 +13,7 @@ import coralImage from '../../assents/coral.png';
 import diverImage from '../../assents/mergulhador.png';
 import facebookIcon from '../../assents/facebook.png';
 import instagramIcon from '../../assents/instagram.png';
-import { auth } from '../../firebase/firebase';
 import { useNavigate } from 'react-router-dom';
-import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
 
 export function Home() {
     const [hidden, setHide] = useState(true);
@@ -74,12 +72,17 @@ export function Home() {
         <div className="classes">
             <header>
                 <div className="container">
-                    <div className="logo_container">
+                    <div className="logo_container logo-home">
                         <img className="src_logo" src={logo} alt="Logo Coral Guard" />
                         <p className="tag_logo">Coral Guard</p>
                     </div>
                     <div className="links_container">
                         <p className="login" onClick={async () => {
+                            /*const provider = new GoogleAuthProvider()
+                            const userCredential = await signInWithPopup(auth, provider)
+
+                            console.log(userCredential)*/
+
                             navigate('/login')
                         }}>Login</p>
                         <p className="create" onClick={() => navigate('/register')}>Criar Conta</p>
@@ -112,7 +115,7 @@ export function Home() {
                         <div className={`block ${hidden ? 'hidden' : ''}`}>
                             <p className="question_title">O que são corais?</p>
                             <p className="txt">
-                                Os corais são organismos coloniais marinhos que se fixam em um local e são formados por centenas de pequenos animais chamados pólipos.
+                                Os corais são estruturas complexas e vibrantes que são essenciais para a saúde dos ecossistemas marinhos, oferecendo abrigo e alimento a diversas espécies. No entanto, são sensíveis a mudanças ambientais, tornando-os vulneráveis ao aquecimento global e à poluição. Preservar os corais é crucial para manter a biodiversidade e proteger as comunidades costeiras que dependem dos recifes.
                             </p>
                         </div>
                     </div>
@@ -121,7 +124,7 @@ export function Home() {
                         <div className={`block ${hidden ? 'hidden' : ''}`}>
                             <p className="question_title">Problema</p>
                             <p className="txt">
-                                O mapeamento de corais é fundamental para a conservação dos recifes, mas enfrenta desafios técnicos e ambientais.
+                                O Branqueamento dos recifes de corais é causado pelo aumento da temperatura dos oceanos, poluição, acidificação das águas. Isso leva à morte dos corais, causando perda da vida marinha. Como resultado, o turismo e a economia das comunidades costeiras , que dependem dos recifes, são gravemente afetadas.
                             </p>
                             <img className="coral" src={coralImage} alt="Imagem de coral" />
                         </div>
@@ -129,9 +132,21 @@ export function Home() {
 
                     <div className="txt_block">
                         <div className={`block ${hidden ? 'hidden' : ''}`}>
+                            <p className="question_title">Dados sobre o Branqueamento</p>
+                            <p className="txt">
+                                O fenômeno do branqueamento é uma situação alarmante, mas ainda desconhecida da maioria das pessoas;
+                                25% das espécies marinhas dependem dos corais  deles para sobreviver;
+                                54% dos corais já estão mortos, e se nada for feito, até 2030 esse número pode chegar a 70%;
+                                As algas marinhas produzem mais de 50% do oxigênio que respiramos.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div className="txt_block">
+                        <div className={`block ${hidden ? 'hidden' : ''}`}>
                             <p className="question_title">Solução</p>
                             <p className="txt">
-                                Aplicativos para mergulhadores e a conscientização da população são essenciais para a preservação dos corais.
+                            O primeiro passo para combater esse problema é a conçientização.  É fundamental educar sobre a importância dos recifes de corais e os danos do branqueamento. Campanhas educativas em escolas e redes sociais podem sensibilizar a população. Promover turismo responsável e reduzir a pegada de carbono ajuda a combater o aquecimento global. Organizações e governos devem colaborar para implementar políticas eficazes que protejam e regenerem os recifes, garantindo a saúde dos oceanos e a sobrevivência de várias espécies marinhas.
                             </p>
                             <img className="mergulhador" src={diverImage} alt="Imagem de mergulhador" />
                         </div>
@@ -141,7 +156,7 @@ export function Home() {
                         <div className={`block ${hidden ? 'hidden' : ''}`}>
                             <p className="question_title">Conscientização</p>
                             <p className="txt">
-                                Use o <span className="highlight">Coral Guard</span> para registrar a saúde dos corais e garantir a preservação para futuras gerações.
+                            Para proteger os corais, evite tocar ou pisar neles ao mergulhar e reduza o uso de plásticos. Participe de limpezas locais, apoie organizações de conservação e eduque outros sobre a importância dos corais. Se você mergulha, use o <span className="highlight">Coral Guard</span>! para registrar a saúde dos corais e fornecer dados importantes para a pesquisa. Cada pequena ação conta e, juntos, podemos garantir a saúde dos recifes para as futuras gerações.
                             </p>
                         </div>
                     </div>
@@ -159,12 +174,12 @@ export function Home() {
                         </div>
                         <div className="footer-info">
                             <p className="text-footer">Empresa</p>
-                            <a  >Dna Bots</a>
+                            <a href='https://www.instagram.com' >Dna Bots</a>
                             <p className="text-footer">Política</p>
-                            <a  >Termos de Privacidade</a>
+                            <a href='/terms' >Termos de Privacidade</a>
                             <p className="text-footer">Suporte</p>
-                            <a  >Ajuda</a>
-                            <a  >Feedback</a>
+                            <a href='https://wa.me/3198439760 '>Ajuda</a>
+                            <a href='https://wa.me/3198439760' >Feedback</a>
                         </div>
                     </div>
 
@@ -177,7 +192,7 @@ export function Home() {
                                 <img src={instagramIcon} alt="Instagram" />
                             </a>
                         </div>
-                        <a   className="contact-btn">Contato</a>
+                        <a className="contact-btn" href='https://wa.me/3198439760'>Contato</a>
                         <p className="copyright">© 2024 Coral Guard</p>
                     </div>
                 </div>

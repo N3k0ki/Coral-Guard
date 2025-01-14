@@ -1,242 +1,242 @@
-import React, { useState } from "react";
-import { db, storage } from "../../firebase/firebase"; // Certifique-se de que o Firebase foi configurado
-import { doc, setDoc } from "firebase/firestore"; // Para adicionar dados ao Firestore
-import { ref, uploadBytesResumable, } from "firebase/storage";
-import './addpost.css';
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom"; // Importa o hook useNavigate
+import { storage } from "../../firebase/firebase.js";
+import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
+import { doc, setDoc, getDoc } from "firebase/firestore";
+import { db } from "../../firebase/firebase.js";
+import "./addpost.css";
 
-export function CoralForm() {
-    const [formData, setFormData] = useState({
-        date: "",
-        location: "",
-        reference: "",
-        temperature: "",
-        status: "",
-        observations: "",
-        image: null,
-    });
+function CoralForm() {
+  const navigate = useNavigate();
+  const [formData, setFormData] = useState({
+    date: "",
+    location: "",
+    reference: "",
+    temperature: "",
+    status: "",
+    observations: "",
+    image: null,
+    userName: "",
+    userEmail: "",
+  });
+  const [loading, setLoading] = useState(false);
+  const [imageUrl, setImageUrl] = useState("");
 
-    const [successMessage, setSuccessMessage] = useState(false);
-    const [loading, setLoading] = useState(false);
+  useEffect(() => {
+    const fetchUserData = async () => {
+      const currentUserEmail = "email-do-usuario-logado"; // Substitua com autenticação Firebase
+      const userDocRef = doc(db, "Usuarios", currentUserEmail);
 
-    const handleInputChange = (e) => {
-        const { id, value } = e.target;
-        setFormData((prevData) => ({
+      try {
+        const userSnapshot = await getDoc(userDocRef);
+        if (userSnapshot.exists()) {
+          const userData = userSnapshot.data();
+          setFormData((prevData) => ({
             ...prevData,
-            [id]: value,
-        }));
-    };
-
-
-    const handleRadioChange = (e) => {
-        const { value } = e.target;
-        setFormData((prevData) => ({
-            ...prevData,
-            status: value,
-        }));
-    };
-
-    const handleImageChange = (e) => {
-        const file = e.target.files[0];
-        setFormData((prevData) => ({
-            ...prevData,
-            image: file,
-        }));
-    };
-
-    const uploadFile = async (fileId, file) => {
-        if (!file) return;
-
-        const storageRef = ref(storage, `files/${fileId}`);
-        await uploadBytesResumable(storageRef, file);
-    }
-
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        setLoading(true);
-        const date = new Date()
-        const id = date.getTime()
-
-        try {
-            const formRef = doc(db, "coralRecords", id.toString());
-
-            // Envia os dados para o Firestore
-            await setDoc(formRef, {
-                date: formData.date,
-                location: formData.location,
-                reference: formData.reference,
-                temperature: formData.temperature,
-                status: formData.status,
-                observations: formData.observations
-            });
-
-            try {
-                // Envia o arquivo para o banco de dados
-                await uploadFile(id, formData.image)
-
-            } catch (e) {
-                console.log(e)
-            }
-
-            // Exibe a mensagem de sucesso
-            setSuccessMessage(true);
-
-            // Limpa o formulário após 3 segundos
-            setTimeout(() => {
-                setSuccessMessage(false);
-                setFormData({
-                    date: "",
-                    location: "",
-                    reference: "",
-                    temperature: "",
-                    status: "",
-                    observations: "",
-                    image: null,
-                });
-            }, 3000);
-        } catch (error) {
-            console.error("Erro ao salvar dados no Firestore:", error);
-        } finally {
-            setLoading(false);
+            userName: userData.nome,
+            userEmail: currentUserEmail,
+          }));
         }
+      } catch (error) {
+        console.error("Erro ao buscar dados do usuário:", error);
+      }
     };
 
-    return (
-        <div className="container coral-form-container">
-            <form className="coral-form" onSubmit={handleSubmit}>
-                <h1 className="coral-form-title">🌊 Registro de Monitoramento Coral</h1>
+    fetchUserData();
+  }, []);
 
-                <div className="form-group coral-form-group">
-                    <label htmlFor="date" className="form-label">Data</label>
-                    <input
-                        type="date"
-                        id="date"
-                        className="form-input"
-                        value={formData.date}
-                        onChange={handleInputChange}
-                        required
-                    />
-                </div>
+  const handleInputChange = (e) => {
+    const { id, value } = e.target;
+    setFormData((prevData) => ({
+      ...prevData,
+      [id]: value,
+    }));
+  };
 
-                <div className="form-group coral-form-group">
-                    <label htmlFor="location" className="form-label">Localização</label>
-                    <input
-                        type="text"
-                        id="location"
-                        className="form-input"
-                        value={formData.location}
-                        onChange={handleInputChange}
-                        placeholder="Digite a localização"
-                        required
-                    />
-                </div>
+  const handleRadioChange = (e) => {
+    const { value } = e.target;
+    setFormData((prevData) => ({
+      ...prevData,
+      status: value,
+    }));
+  };
 
-                <div className="form-group coral-form-group">
-                    <label htmlFor="reference" className="form-label">Ponto de Referência</label>
-                    <input
-                        type="text"
-                        id="reference"
-                        className="form-input"
-                        value={formData.reference}
-                        onChange={handleInputChange}
-                        placeholder="Digite o ponto de referência"
-                        required
-                    />
-                </div>
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setFormData((prevData) => ({
+        ...prevData,
+        image: file,
+      }));
+      const reader = new FileReader();
+      reader.onload = () => {
+        setImageUrl(reader.result);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
 
-                <div className="form-group coral-form-group">
-                    <label htmlFor="temperature" className="form-label">Temperatura (°C)</label>
-                    <input
-                        type="number"
-                        id="temperature"
-                        step="0.1"
-                        className="form-input"
-                        value={formData.temperature}
-                        onChange={handleInputChange}
-                        placeholder="Digite a temperatura"
-                        required
-                    />
-                </div>
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
 
-                <div className="form-group coral-form-group">
-                    <label className="form-label">Estado Físico dos Corais</label>
-                    <div className="coral-status">
-                        {["Excelente", "Bom", "Regular", "Ruim"].map((status) => (
-                            <div className="status-option coral-status-option" key={status}>
-                                <input
-                                    type="radio"
-                                    id={status}
-                                    name="status"
-                                    value={status}
-                                    className="status-radio"
-                                    checked={formData.status === status}
-                                    onChange={handleRadioChange}
-                                    required
-                                />
-                                <label htmlFor={status} className="status-label">
-                                    {status.charAt(0).toUpperCase() + status.slice(1)}
-                                </label>
-                            </div>
-                        ))}
-                    </div>
-                </div>
+    const photoId = crypto.randomUUID();
 
-                <div className="form-group coral-form-group">
-                    <label className="form-label">Imagem do Coral</label>
-                    <div
-                        id="imagePreview"
-                        className={`image-preview coral-image-preview ${formData.image ? "" : "empty"
-                            }`}
-                    >
-                        {formData.image ? (
-                            <img
-                                src={URL.createObjectURL(formData.image)}
-                                alt="Preview da imagem do coral"
-                                className="preview-image"
-                            />
-                        ) : (
-                            "Nenhuma imagem selecionada"
-                        )}
-                    </div>
-                    <label className="custom-file-upload coral-file-upload">
-                        <input
-                            type="file"
-                            id="imageInput"
-                            className="file-input"
-                            // accept="image/*"
-                            onChange={(e) => { handleImageChange(e) }}
-                        />
-                        Escolher Imagem
-                    </label>
-                </div>
+    try {
+      let uploadedImageUrl = "";
 
-                <div className="form-group coral-form-group">
-                    <label htmlFor="observations" className="form-label">Observações</label>
-                    <textarea
-                        id="observations"
-                        rows="4"
-                        className="form-textarea"
-                        value={formData.observations}
-                        onChange={handleInputChange}
-                        placeholder="Digite suas observações"
-                    />
-                </div>
+      if (formData.image) {
+        const storageRef = ref(storage, `coralImages/${photoId}`);
+        await uploadBytes(storageRef, formData.image);
+        uploadedImageUrl = await getDownloadURL(storageRef);
+        setImageUrl(uploadedImageUrl);
+      }
 
-                <button
-                    type="submit"
-                    className="form-submit-btn"
-                    disabled={loading}
-                >
-                    {loading ? "Enviando..." : "Enviar Registro"}
-                </button>
-            </form>
+      const cleanedFormData = { ...formData };
+      delete cleanedFormData.image;
 
-            {successMessage && (
-                <div id="successMessage" className="success-message coral-success-message">
-                    Registro enviado com sucesso!
-                </div>
-            )}
+      const formRef = doc(db, "coralRecords", photoId);
+      await setDoc(formRef, {
+        ...cleanedFormData,
+        imageUrl: uploadedImageUrl,
+        id: photoId,
+        userName: formData.userName,
+        userEmail: formData.userEmail,
+      });
+
+      navigate("/success");
+    } catch (error) {
+      console.error("Erro ao salvar dados no Firestore:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <div className="container coral-form-container">
+      <form className="coral-form" onSubmit={handleSubmit}>
+        <h1 className="coral-form-title">🌊 Registro de Monitoramento de Corais</h1>
+
+        {/* Campos do formulário */}
+        <div className="form-group coral-form-group">
+          <label htmlFor="date" className="form-label">Data</label>
+          <input
+            type="date"
+            id="date"
+            className="form-input"
+            value={formData.date}
+            onChange={handleInputChange}
+            required
+          />
         </div>
-    );
+
+        <div className="form-group coral-form-group">
+          <label htmlFor="location" className="form-label">Localização</label>
+          <input
+            type="text"
+            id="location"
+            className="form-input"
+            value={formData.location}
+            onChange={handleInputChange}
+            placeholder="Digite o ponto de referência"
+            required
+          />
+        </div>
+
+        <div className="form-group coral-form-group">
+          <label htmlFor="reference" className="form-label">Ponto de Referência</label>
+          <input
+            type="text"
+            id="reference"
+            className="form-input"
+            value={formData.reference}
+            onChange={handleInputChange}
+            placeholder="Digite o ponto de referência"
+            required
+          />
+        </div>
+
+        <div className="form-group coral-form-group">
+          <label htmlFor="temperature" className="form-label">Temperatura (°C)</label>
+          <input
+            type="number"
+            id="temperature"
+            step="0.1"
+            className="form-input"
+            value={formData.temperature}
+            onChange={handleInputChange}
+            placeholder="Digite a temperatura"
+            required
+          />
+        </div>
+
+        <div className="form-group coral-form-group">
+          <label className="form-label">Estado Físico dos Corais</label>
+          <div className="coral-status">
+            {["Excelente", "Bom", "Regular", "Ruim"].map((status) => (
+              <div className="status-option coral-status-option" key={status}>
+                <input
+                  type="radio"
+                  id={status}
+                  name="status"
+                  value={status}
+                  className="status-radio"
+                  checked={formData.status === status}
+                  onChange={handleRadioChange}
+                  required
+                />
+                <label htmlFor={status} className="status-label">
+                  {status.charAt(0).toUpperCase() + status.slice(1)}
+                </label>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Botão de selecionar imagem */}
+        <div className="form-group coral-form-group">
+          <label className="form-label">Imagem do Coral</label>
+          <input
+            type="file"
+            className="file-input"
+            onChange={handleImageChange}
+            required
+          />
+        </div>
+
+        {/* Pré-visualização da imagem */}
+        <div className={`image-preview coral-image-preview ${imageUrl ? "" : "empty"}`}>
+          {imageUrl ? (
+            <img className="file-display" src={imageUrl} alt="Pré-visualização do Coral" />
+          ) : (
+            <span className="placeholder-text">Nenhuma imagem selecionada</span>
+          )}
+        </div>
+
+        {/* Observações */}
+        <div className="form-group coral-form-group">
+          <label htmlFor="observations" className="form-label">Observações</label>
+          <textarea
+            id="observations"
+            rows="4"
+            className="form-textarea"
+            placeholder="Digite suas observações"
+            value={formData.observations}
+            onChange={handleInputChange}
+          />
+        </div>
+
+        {/* Botão de envio */}
+        <button
+          type="submit"
+          className="form-submit-btn"
+          disabled={loading}
+        >
+          {loading ? "Enviando..." : "Enviar Registro"}
+        </button>
+      </form>
+    </div>
+  );
 }
 
 export default CoralForm;

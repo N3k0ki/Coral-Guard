@@ -124,7 +124,6 @@ const FilterButtons = ({ activeCategory, onSelectCategory }) => {
 };
 
 const CategoryDescriptions = ({ activeCategory }) => {
-  // Map de descrições das categorias
   const categoryDescriptions = {
     introducao: {
       title: "Introdução aos Corais",

@@ -225,9 +225,6 @@
   
   /* Mobile-specific styles */
   @media (max-width: 767px) {
-    body {
-      padding: 10px;
-    }
     
     .header h1 {
       font-size: 20px;
