@@ -72,7 +72,7 @@ export function Inicio({ usuario }) {
       <section className="centered-container">
         <div className="centered-container__item centered-container__item--bold">
           <p className="text-home">
-            <strong>Bem-vindo(a), {nomeUsuario}!</strong>
+            <strong>Bem-vindo(a), {usuario.name}!</strong>
           </p>
         </div>
         <div className="centered-container__item centered-container__item--bordered">

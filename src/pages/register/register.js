@@ -132,3 +132,5 @@ export function Register({ setUsuario }) {
         </div>
     );
 }
+
+export default Register;

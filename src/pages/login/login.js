@@ -15,26 +15,26 @@ function Login() {
             navigate('/terms');
         }
     }, [navigate]);
-
+    
     const handleLogin = async () => {
         if (usuario.email && usuario.senha) {
             const referencia = doc(db, 'Usuarios', usuario.email);
             const snapshot = await getDoc(referencia);
-
+    
             if (!snapshot.exists()) {
                 alert("Usuário inexistente");
                 return;
             }
-
+    
             const usuarioDb = snapshot.data();
-
+    
             if (usuarioDb.senha === usuario.senha) {
-                const tipo = usuarioDb.tipo || 'cliente'; // Verifica o tipo de usuário no Firestore
-
-                // Salva o usuário localmente
+                const tipo = usuarioDb.tipo || 'cliente';
+    
+                // Salva o usuário no localStorage
                 localStorage.setItem('usuario', JSON.stringify(usuarioDb));
-
-                // Redireciona para a página com base no tipo
+    
+                // Redireciona o usuário para a página com base no tipo
                 switch (tipo) {
                     case 'adm':
                         navigate('/admin');
@@ -45,7 +45,7 @@ function Login() {
                     case 'org':
                         navigate('/organizacoes');
                         break;
-                    default: // cliente
+                    default:
                         navigate('/inicio');
                 }
             } else {
