@@ -13,7 +13,8 @@ function CoralForm() {
     location: "",
     reference: "",
     temperature: "",
-    status: "",
+    estado: "",
+    status:"",
     observations: "",
     image: null,
     userName: "",
@@ -57,7 +58,7 @@ function CoralForm() {
     const { value } = e.target;
     setFormData((prevData) => ({
       ...prevData,
-      status: value,
+      estado: value,
     }));
   };
 
@@ -79,31 +80,33 @@ function CoralForm() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-
+  
     const photoId = crypto.randomUUID();
-
+  
     try {
       let uploadedImageUrl = "";
-
+  
       if (formData.image) {
         const storageRef = ref(storage, `coralImages/${photoId}`);
         await uploadBytes(storageRef, formData.image);
         uploadedImageUrl = await getDownloadURL(storageRef);
         setImageUrl(uploadedImageUrl);
       }
-
+  
       const cleanedFormData = { ...formData };
       delete cleanedFormData.image;
-
+  
+      // Definindo o estado como "em-analise" ao criar o post
       const formRef = doc(db, "coralRecords", photoId);
       await setDoc(formRef, {
         ...cleanedFormData,
         imageUrl: uploadedImageUrl,
         id: photoId,
+        estado: "em-analise",  // Adiciona o campo estado com valor "em-analise"
         userName: formData.userName,
         userEmail: formData.userEmail,
       });
-
+  
       navigate("/success");
     } catch (error) {
       console.error("Erro ao salvar dados no Firestore:", error);
@@ -173,20 +176,20 @@ function CoralForm() {
         <div className="form-group coral-form-group">
           <label className="form-label">Estado Físico dos Corais</label>
           <div className="coral-status">
-            {["Excelente", "Bom", "Regular", "Ruim"].map((status) => (
-              <div className="status-option coral-status-option" key={status}>
+            {["Excelente", "Bom", "Regular", "Ruim"].map((estado) => (
+              <div className="status-option coral-status-option" key={estado}>
                 <input
                   type="radio"
-                  id={status}
+                  id={estado}
                   name="status"
-                  value={status}
+                  value={estado}
                   className="status-radio"
-                  checked={formData.status === status}
+                  checked={formData.estado === estado}
                   onChange={handleRadioChange}
                   required
                 />
-                <label htmlFor={status} className="status-label">
-                  {status.charAt(0).toUpperCase() + status.slice(1)}
+                <label htmlFor={estado} className="status-label">
+                  {estado.charAt(0).toUpperCase() + estado.slice(1)}
                 </label>
               </div>
             ))}

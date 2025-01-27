@@ -1,46 +1,64 @@
 import React, { useEffect, useState } from 'react';
 import { db } from "../../firebase/firebase.js"; // Importando a configuração do Firebase
-import { doc, getDoc, getDocs, collection } from "firebase/firestore";
+import { getDocs, collection, doc, updateDoc, deleteDoc } from "firebase/firestore";
 import './mod.css'; // Importa o CSS necessário
 
 const Mod = () => {
-  const [currentReports, setCurrentReports] = useState([]);
+  const [postList, setPostList] = useState([]);
   const [selectedReportId, setSelectedReportId] = useState(null);
-  const [deletedReportsCount, setDeletedReportsCount] = useState(0);
   const [filter, setFilter] = useState('todos');
 
-  // Função para buscar os posts no Firestore
+  // Buscar posts no Firestore
   useEffect(() => {
-    const fetchReports = async () => {
-      const reportsSnapshot = await getDocs(collection(db, "coralRecords"));
-      const reportsData = reportsSnapshot.docs.map(doc => doc.data());
-      setCurrentReports(reportsData);
+    const fetchPosts = async () => {
+      try {
+        const querySnapshot = await getDocs(collection(db, "coralRecords"));
+        const posts = querySnapshot.docs.map((doc) => ({
+          id: doc.id,
+          status: "em análise",
+          ...doc.data(),
+        }));
+        setPostList(posts);
+      } catch (error) {
+        console.error("Erro ao buscar dados de corais:", error);
+      }
     };
 
-    fetchReports();
+    fetchPosts();
   }, []);
 
-  const updateReportsDisplay = (filter) => {
-    setFilter(filter);
+  const updateStatus = async (id, newStatus) => {
+    try {
+      const postRef = doc(db, "coralRecords", id);
+      await updateDoc(postRef, { status: newStatus });
+
+      const updatedPosts = postList.map((post) =>
+        post.id === id ? { ...post, status: newStatus } : post
+      );
+      setPostList(updatedPosts);
+    } catch (error) {
+      console.error("Erro ao atualizar status:", error);
+    }
   };
 
-  const updateStatus = (reportId, newStatus) => {
-    setCurrentReports((prevReports) =>
-      prevReports.map((report) =>
-        report.id === reportId ? { ...report, status: newStatus } : report
-      )
-    );
+  const deletePost = async (id, justification) => {
+    try {
+      const postRef = doc(db, "coralRecords", id);
+      await deleteDoc(postRef);
+
+      const updatedPosts = postList.filter((post) => post.id !== id);
+      setPostList(updatedPosts);
+      closeJustificationModal();
+    } catch (error) {
+      console.error("Erro ao excluir post:", error);
+    }
   };
 
   const showJustificationModal = (reportId) => {
     setSelectedReportId(reportId);
-    document.getElementById('overlay').style.display = 'block';
-    document.getElementById('justificationModal').style.display = 'block';
   };
 
   const closeJustificationModal = () => {
-    document.getElementById('overlay').style.display = 'none';
-    document.getElementById('justificationModal').style.display = 'none';
     setSelectedReportId(null);
   };
 
@@ -51,21 +69,15 @@ const Mod = () => {
       return;
     }
 
-    setCurrentReports((prevReports) =>
-      prevReports.filter((report) => report.id !== selectedReportId)
-    );
-    setDeletedReportsCount((prevCount) => prevCount + 1);
-    closeJustificationModal();
+    if (selectedReportId) {
+      deletePost(selectedReportId, justification);
+    }
   };
 
-  const forwardPost = (reportId) => {
-    alert(`Post ${reportId} enviado com sucesso!`);
-  };
-
-  const filteredReports =
+  const filteredPosts =
     filter === 'todos'
-      ? currentReports
-      : currentReports.filter((report) => report.status === filter);
+      ? postList
+      : postList.filter((post) => post.status === filter);
 
   return (
     <>
@@ -78,38 +90,40 @@ const Mod = () => {
 
       <div className="container mt-4">
         <div className="row">
+          {/* Estatísticas */}
           <div className="col-md-3">
             <div className="card">
               <div className="card-body">
                 <h5>Estatísticas</h5>
-                <div className="mt-3">
-                  <p>Total de denúncias: {currentReports.length}</p>
-                  <p>Em análise: {currentReports.filter((r) => r.status === 'em-analise').length}</p>
-                  <p>Deferidas: {currentReports.filter((r) => r.status === 'deferida').length}</p>
-                  <p>Excluídas: {deletedReportsCount}</p>
-                </div>
+                <p>Total de denúncias: {postList.length}</p>
+                <p>
+                  Em análise: {postList.filter((post) => post.status === 'em análise').length}
+                </p>
+                <p>Deferidas: {postList.filter((r) => r.status === 'deferida').length}</p>
+                <p>Indeferidas: {postList.filter((post) => post.status === "indeferido").length}</p>
               </div>
             </div>
           </div>
 
+          {/* Lista de denúncias */}
           <div className="col-md-9">
             <div className="mb-4">
               <div className="btn-group" role="group">
                 <button
                   className="btn btn-outline-primary"
-                  onClick={() => updateReportsDisplay('todos')}
+                  onClick={() => setFilter("todos")}
                 >
                   Todos
                 </button>
                 <button
                   className="btn btn-outline-warning"
-                  onClick={() => updateReportsDisplay('em-analise')}
+                  onClick={() => setFilter("em análise")}
                 >
                   Em Análise
                 </button>
                 <button
                   className="btn btn-outline-success"
-                  onClick={() => updateReportsDisplay('deferida')}
+                  onClick={() => setFilter('deferida')}
                 >
                   Deferidas
                 </button>
@@ -117,99 +131,95 @@ const Mod = () => {
             </div>
 
             <div id="reports-container">
-              {filteredReports.map((report) => (
-                <div
-                  key={report.id}
-                  className={`card report-card status-${report.status}`}
-                >
-                  <div className="card-body">
-                    <h5 className="card-title">Denúncia #{report.id}</h5>
-                    <p className="card-text">
-                      <strong>Data:</strong> {report.date}
-                    </p>
-                    <p className="card-text">
-                      <strong>Denunciante:</strong> {report.reporter}
-                    </p>
-                    <p className="card-text">
-                      <strong>Email:</strong> {report.email}
-                    </p>
-                    <p className="card-text">
-                      <strong>Local:</strong> {report.location}
-                    </p>
-                    <p className="card-text">
-                      <strong>Temperatura:</strong> {report.temperature}°C
-                    </p>
-                    <p className="card-text">
-                      <strong>Estado dos Corais:</strong>{' '}
-                      <span className={`coral-condition-${report.coralCondition}`}>
-                        {report.coralCondition}
-                      </span>
-                    </p>
-                    <div className="card-text">
-                      <strong>Observações:</strong>
-                      <div className="border p-2 mt-2 mb-3">{report.observations}</div>
-                    </div>
-                    <div className="card-text">
-                      <strong>Imagem:</strong>
-                      <br />
-                      <img
-                        src={report.imageUrl}
-                        className="img-fluid mt-2"
-                        alt="Coral"
-                      />
-                    </div>
-                    <div className="btn-group mt-3">
-                      {report.status === 'em-analise' && (
-                        <button
-                          className="btn btn-success btn-sm"
-                          onClick={() => updateStatus(report.id, 'deferida')}
-                        >
-                          Deferir
-                        </button>
+              {filteredPosts.length === 0 ? (
+                <p>Nenhuma denúncia encontrada.</p>
+              ) : (
+                filteredPosts.map((post) => (
+                  <div className={`card report-card`} key={post.id}>
+                    <div className="card-body">
+                      <h5 className="card-title">Denúncia #{post.id}</h5>
+                      {post.date && <p><strong>Data:</strong> {post.date}</p>}
+                      {post.reporter && (
+                        <p className="card-text">
+                          <strong>Denunciante:</strong> {post.reporter}
+                        </p>
+                      )}
+                      {post.email && (
+                        <p className="card-text">
+                          <strong>Email:</strong> {post.email}
+                        </p>
+                      )}
+                      {post.location && (
+                        <p className="card-text">
+                          <strong>Local:</strong> {post.location}
+                        </p>
+                      )}
+                      {post.temperature && (
+                        <p className="card-text">
+                          <strong>Temperatura:</strong> {post.temperature}°C
+                        </p>
+                      )}
+                      {post.coralCondition && (
+                        <p className="card-text">
+                          <strong>Estado dos Corais:</strong>{' '}
+                          <span className={`coral-condition-${post.coralCondition}`}>
+                            {post.coralCondition}
+                          </span>
+                        </p>
+                      )}
+                      {post.observations && (
+                        <div className="card-text">
+                          <strong>Observações:</strong>
+                          <div className="border p-2 mt-2 mb-3">{post.observations}</div>
+                        </div>
+                      )}
+                      {post.imageUrl && (
+                        <div className="card-text">
+                          <strong>Imagem:</strong>
+                          <br />
+                          <img
+                            src={post.imageUrl}
+                            className="img-fluid mt-2"
+                            alt="Coral"
+                          />
+                        </div>
                       )}
                       <button
+                        className="btn btn-success btn-sm"
+                        onClick={() => updateStatus(post.id, 'deferida')}
+                      >
+                        Deferir
+                      </button>
+                      <button
                         className="btn btn-warning btn-sm"
-                        onClick={() => showJustificationModal(report.id)}
+                        onClick={() => showJustificationModal(post.id)}
                       >
                         Excluir
                       </button>
-                      <button
-                        className="btn btn-info btn-sm"
-                        onClick={() => forwardPost(report.id)}
-                      >
-                        Enviar Post
-                      </button>
                     </div>
                   </div>
-                </div>
-              ))}
+                ))
+              )}
             </div>
           </div>
         </div>
       </div>
 
-      <div className="overlay" id="overlay" style={{ display: 'none' }}></div>
-      <div
-        className="modal-justify"
-        id="justificationModal"
-        style={{ display: 'none' }}
-      >
-        <h5>Justificativa para Exclusão</h5>
-        <textarea
-          className="form-control mt-3"
-          id="justificationText"
-          rows="4"
-          placeholder="Digite sua justificativa..."
-        ></textarea>
-        <div className="mt-3">
-          <button className="btn btn-primary" onClick={submitJustification}>
-            Enviar
-          </button>
-          <button className="btn btn-secondary" onClick={closeJustificationModal}>
-            Cancelar
-          </button>
+      {/* Modal de Justificativa */}
+      {selectedReportId && (
+        <div id="overlay">
+          <div id="justificationModal">
+            <h5>Justificativa para exclusão</h5>
+            <textarea id="justificationText" className="form-control" rows="3"></textarea>
+            <button className="btn btn-danger mt-2" onClick={submitJustification}>
+              Confirmar Exclusão
+            </button>
+            <button className="btn btn-secondary mt-2" onClick={closeJustificationModal}>
+              Cancelar
+            </button>
+          </div>
         </div>
-      </div>
+      )}
     </>
   );
 };

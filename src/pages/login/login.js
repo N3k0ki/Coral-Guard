@@ -40,7 +40,7 @@ function Login() {
                         navigate('/admin');
                         break;
                     case 'mod':
-                        navigate('/moderador');
+                        navigate('/mod');
                         break;
                     case 'org':
                         navigate('/organizacoes');

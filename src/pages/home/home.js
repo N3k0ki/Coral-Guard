@@ -71,7 +71,7 @@ export function Home() {
     return (
         <div className="classes">
             <header>
-                <div className="container">
+                <div className="container_nav">
                     <div className="logo_container logo-home">
                         <img className="src_logo" src={logo} alt="Logo Coral Guard" />
                         <p className="tag_logo">Coral Guard</p>

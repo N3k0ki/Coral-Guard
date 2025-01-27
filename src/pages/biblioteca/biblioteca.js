@@ -124,49 +124,75 @@ const FilterButtons = ({ activeCategory, onSelectCategory }) => {
 };
 
 const CategoryDescriptions = ({ activeCategory }) => {
-  const categoryDescriptions = {
-    introducao: {
-      title: "Introdução aos Corais",
-      text: "Os corais são animais marinhos fundamentais para a vida oceânica.",
-    },
-    importancia: {
-      title: "Importância dos Recifes",
-      text: "Os recifes de coral abrigam 25% da vida marinha.",
-    },
-    problemas: {
-      title: "Problemas que Afetam os Corais",
-      text: "Poluição, aquecimento global e pesca predatória ameaçam os corais.",
-    },
-    mudancas: {
-      title: "Mudanças Climáticas",
-      text: "A acidificação dos oceanos impacta os corais.",
-    },
-    solucoes: {
-      title: "Soluções e Conservação",
-      text: "Descubra formas de preservar os recifes de coral.",
-    },
-    turistas: {
-      title: "Como Turistas Podem Ajudar",
-      text: "Dicas para um turismo sustentável nos recifes.",
-    },
-    recursos: {
-      title: "Recursos e Atividades",
-      text: "Materiais educativos e atividades interativas.",
-    },
-  };
-
-  // Se a categoria ativa for "all" ou não existir no map, não exibe nada
-  if (activeCategory === "all" || !categoryDescriptions[activeCategory]) {
-    return null;
-  }
-
-  // Desestruturação para pegar título e texto da categoria ativa
-  const { title, text } = categoryDescriptions[activeCategory];
-
   return (
-    <div className="category-description">
-      <h2 className="category-title">{title}</h2>
-      <p className="category-text">{text}</p>
+    <div className="category-descriptions-container">
+      {activeCategory === "introducao" && (
+        <div className="category-description">
+          <h2>Introdução aos Corais</h2>
+          <p>
+            Os corais são animais marinhos que formam grandes colônias e são
+            fundamentais para a vida marinha. Eles criam estruturas complexas que
+            servem de habitat para milhares de espécies.
+          </p>
+        </div>
+      )}
+      {activeCategory === "importancia" && (
+        <div className="category-description">
+          <h2>Importância dos Recifes de Corais</h2>
+          <p>
+            Os recifes de coral são considerados os berçários dos oceanos,
+            abrigando 25% de toda a vida marinha. Além disso, protegem as costas
+            contra erosão e tempestades.
+          </p>
+        </div>
+      )}
+      {activeCategory === "problemas" && (
+        <div className="category-description">
+          <h2>Problemas que Afetam os Corais</h2>
+          <p>
+            Os principais problemas incluem poluição marinha, acidificação dos
+            oceanos, branqueamento dos corais e práticas de pesca destrutivas.
+          </p>
+        </div>
+      )}
+      {activeCategory === "mudancas" && (
+        <div className="category-description">
+          <h2>Mudanças Climáticas e Impacto nos Corais</h2>
+          <p>
+            O aquecimento global causa o branqueamento dos corais, tornando-os
+            mais vulneráveis a doenças e morte. A acidificação dos oceanos também
+            dificulta a formação de seus esqueletos calcários.
+          </p>
+        </div>
+      )}
+      {activeCategory === "solucoes" && (
+        <div className="category-description">
+          <h2>Soluções e Estratégias de Conservação</h2>
+          <p>
+            Estratégias incluem a criação de áreas marinhas protegidas,
+            restauração de recifes, redução da poluição e educação ambiental.
+          </p>
+        </div>
+      )}
+      {activeCategory === "turistas" && (
+        <div className="category-description">
+          <h2>Como Turistas Podem Ajudar</h2>
+          <p>
+            Turistas podem ajudar escolhendo operadoras responsáveis, não tocando
+            nos corais, usando protetor solar adequado e apoiando projetos de
+            conservação.
+          </p>
+        </div>
+      )}
+      {activeCategory === "recursos" && (
+        <div className="category-description">
+          <h2>Recursos e Atividades</h2>
+          <p>
+            Explore materiais educativos, jogos e atividades para aprender mais
+            sobre os corais e sua conservação.
+          </p>
+        </div>
+      )}
     </div>
   );
 };

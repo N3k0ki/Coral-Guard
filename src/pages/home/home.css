@@ -5,7 +5,7 @@
     background-attachment: fixed;
 }
 
-.container {
+.container_nav {
     display: flex;
     align-items: center;
     justify-content: space-between;
