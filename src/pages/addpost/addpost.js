@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom"; // Importa o hook useNavigate
+import { useNavigate } from "react-router-dom";
 import { storage } from "../../firebase/firebase.js";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { doc, setDoc, getDoc } from "firebase/firestore";
@@ -14,7 +14,7 @@ function CoralForm() {
     reference: "",
     temperature: "",
     estado: "",
-    status:"",
+    status: "",
     observations: "",
     image: null,
     userName: "",
@@ -25,7 +25,7 @@ function CoralForm() {
 
   useEffect(() => {
     const fetchUserData = async () => {
-      const currentUserEmail = "email-do-usuario-logado"; // Substitua com autenticação Firebase
+      const currentUserEmail = "email-do-usuario-logado"; // Substituir com autenticação Firebase
       const userDocRef = doc(db, "Usuarios", currentUserEmail);
 
       try {
@@ -55,10 +55,10 @@ function CoralForm() {
   };
 
   const handleRadioChange = (e) => {
-    const { value } = e.target;
+    const { name, value } = e.target;
     setFormData((prevData) => ({
       ...prevData,
-      estado: value,
+      [name]: value,
     }));
   };
 
@@ -80,33 +80,33 @@ function CoralForm() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-  
+
     const photoId = crypto.randomUUID();
-  
+
     try {
       let uploadedImageUrl = "";
-  
+
       if (formData.image) {
         const storageRef = ref(storage, `coralImages/${photoId}`);
         await uploadBytes(storageRef, formData.image);
         uploadedImageUrl = await getDownloadURL(storageRef);
         setImageUrl(uploadedImageUrl);
       }
-  
+
       const cleanedFormData = { ...formData };
       delete cleanedFormData.image;
-  
-      // Definindo o estado como "em-analise" ao criar o post
+
       const formRef = doc(db, "coralRecords", photoId);
       await setDoc(formRef, {
         ...cleanedFormData,
         imageUrl: uploadedImageUrl,
         id: photoId,
-        estado: "em-analise",  // Adiciona o campo estado com valor "em-analise"
+        estado: "em-analise",
+        status: formData.status,
         userName: formData.userName,
         userEmail: formData.userEmail,
       });
-  
+
       navigate("/success");
     } catch (error) {
       console.error("Erro ao salvar dados no Firestore:", error);
@@ -120,7 +120,7 @@ function CoralForm() {
       <form className="coral-form" onSubmit={handleSubmit}>
         <h1 className="coral-form-title">🌊 Registro de Monitoramento de Corais</h1>
 
-        {/* Campos do formulário */}
+        {/* Data */}
         <div className="form-group coral-form-group">
           <label htmlFor="date" className="form-label">Data</label>
           <input
@@ -133,6 +133,7 @@ function CoralForm() {
           />
         </div>
 
+        {/* Localização */}
         <div className="form-group coral-form-group">
           <label htmlFor="location" className="form-label">Localização</label>
           <input
@@ -141,11 +142,11 @@ function CoralForm() {
             className="form-input"
             value={formData.location}
             onChange={handleInputChange}
-            placeholder="Digite o ponto de referência"
             required
           />
         </div>
 
+        {/* Ponto de Referência */}
         <div className="form-group coral-form-group">
           <label htmlFor="reference" className="form-label">Ponto de Referência</label>
           <input
@@ -154,11 +155,11 @@ function CoralForm() {
             className="form-input"
             value={formData.reference}
             onChange={handleInputChange}
-            placeholder="Digite o ponto de referência"
             required
           />
         </div>
 
+        {/* Temperatura */}
         <div className="form-group coral-form-group">
           <label htmlFor="temperature" className="form-label">Temperatura (°C)</label>
           <input
@@ -168,43 +169,38 @@ function CoralForm() {
             className="form-input"
             value={formData.temperature}
             onChange={handleInputChange}
-            placeholder="Digite a temperatura"
             required
           />
         </div>
 
+        {/* Estado Físico dos Corais */}
         <div className="form-group coral-form-group">
           <label className="form-label">Estado Físico dos Corais</label>
           <div className="coral-status">
-            {["Excelente", "Bom", "Regular", "Ruim"].map((estado) => (
-              <div className="status-option coral-status-option" key={estado}>
+            {["Excelente", "Bom", "Regular", "Ruim"].map((status) => (
+              <div className="status-option coral-status-option" key={status}>
                 <input
                   type="radio"
-                  id={estado}
+                  id={`status-${status}`}
                   name="status"
-                  value={estado}
+                  value={status}
                   className="status-radio"
-                  checked={formData.estado === estado}
+                  checked={formData.status === status}
                   onChange={handleRadioChange}
                   required
                 />
-                <label htmlFor={estado} className="status-label">
-                  {estado.charAt(0).toUpperCase() + estado.slice(1)}
+                <label htmlFor={`status-${status}`} className="status-label">
+                  {status.charAt(0).toUpperCase() + status.slice(1)}
                 </label>
               </div>
             ))}
           </div>
         </div>
 
-        {/* Botão de selecionar imagem */}
+        {/* Imagem do Coral */}
         <div className="form-group coral-form-group">
           <label className="form-label">Imagem do Coral</label>
-          <input
-            type="file"
-            className="file-input"
-            onChange={handleImageChange}
-            required
-          />
+          <input type="file" className="file-input" onChange={handleImageChange} required />
         </div>
 
         {/* Pré-visualização da imagem */}
@@ -223,18 +219,13 @@ function CoralForm() {
             id="observations"
             rows="4"
             className="form-textarea"
-            placeholder="Digite suas observações"
             value={formData.observations}
             onChange={handleInputChange}
           />
         </div>
 
-        {/* Botão de envio */}
-        <button
-          type="submit"
-          className="form-submit-btn"
-          disabled={loading}
-        >
+        {/* Botão de Envio */}
+        <button type="submit" className="form-submit-btn" disabled={loading}>
           {loading ? "Enviando..." : "Enviar Registro"}
         </button>
       </form>

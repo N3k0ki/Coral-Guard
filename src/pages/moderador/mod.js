@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { db } from "../../firebase/firebase.js"; // Importando a configuração do Firebase
 import { getDocs, collection, doc, updateDoc, deleteDoc } from "firebase/firestore";
 import './mod.css'; // Importa o CSS necessário
@@ -7,7 +8,7 @@ const Mod = () => {
   const [postList, setPostList] = useState([]);
   const [selectedReportId, setSelectedReportId] = useState(null);
   const [filter, setFilter] = useState('todos');
-
+  const navigate = useNavigate();
   // Buscar posts no Firestore
   useEffect(() => {
     const fetchPosts = async () => {
@@ -15,9 +16,9 @@ const Mod = () => {
         const querySnapshot = await getDocs(collection(db, "coralRecords"));
         const posts = querySnapshot.docs.map((doc) => ({
           id: doc.id,
-          status: "em análise",
-          ...doc.data(),
+          ...doc.data(), // Mantendo os dados originais do Firestore
         }));
+        console.log("Posts carregados:", posts); // Verificando os dados no console
         setPostList(posts);
       } catch (error) {
         console.error("Erro ao buscar dados de corais:", error);
@@ -26,6 +27,10 @@ const Mod = () => {
 
     fetchPosts();
   }, []);
+
+  const filteredPosts = filter === 'todos'
+    ? postList
+    : postList.filter((post) => post.estado && post.estado.toLowerCase().trim() === filter.toLowerCase());
 
   const updateStatus = async (id, newStatus) => {
     try {
@@ -74,10 +79,10 @@ const Mod = () => {
     }
   };
 
-  const filteredPosts =
-    filter === 'todos'
-      ? postList
-      : postList.filter((post) => post.status === filter);
+  const handleLogout = () => {
+    localStorage.clear(); // Remove o nome do usuário do localStorage
+    navigate('/'); // Redireciona para a tela inicial
+  };
 
   return (
     <>
@@ -85,51 +90,37 @@ const Mod = () => {
         <div className="container">
           <span className="navbar-brand mb-0 h1">Painel do Administrador</span>
           <span className="text-light">Bem-vindo, Admin</span>
+          <button className="logout-button" onClick={handleLogout}>
+            Logout
+          </button>
         </div>
       </nav>
 
       <div className="container mt-4">
         <div className="row">
-          {/* Estatísticas */}
           <div className="col-md-3">
             <div className="card">
               <div className="card-body">
                 <h5>Estatísticas</h5>
                 <p>Total de denúncias: {postList.length}</p>
                 <p>
-                  Em análise: {postList.filter((post) => post.status === 'em análise').length}
+                  Em análise: {postList.filter((post) => post.estado && post.estado.toLowerCase().trim() === 'em análise').length}
                 </p>
-                <p>Deferidas: {postList.filter((r) => r.status === 'deferida').length}</p>
-                <p>Indeferidas: {postList.filter((post) => post.status === "indeferido").length}</p>
+                <p>Deferidas: {postList.filter((r) => r.estado && r.estado.toLowerCase().trim() === 'deferida').length}</p>
+                <p>Indeferidas: {postList.filter((post) => post.estado && post.estado.toLowerCase().trim() === "indeferido").length}</p>
               </div>
             </div>
           </div>
 
-          {/* Lista de denúncias */}
           <div className="col-md-9">
             <div className="mb-4">
               <div className="btn-group" role="group">
-                <button
-                  className="btn btn-outline-primary"
-                  onClick={() => setFilter("todos")}
-                >
-                  Todos
-                </button>
-                <button
-                  className="btn btn-outline-warning"
-                  onClick={() => setFilter("em análise")}
-                >
-                  Em Análise
-                </button>
-                <button
-                  className="btn btn-outline-success"
-                  onClick={() => setFilter('deferida')}
-                >
-                  Deferidas
-                </button>
+                <button className="btn btn-outline-primary" onClick={() => setFilter("todos")}>Todos</button>
+                <button className="btn btn-outline-warning" onClick={() => setFilter("em análise")}>Em Análise</button>
+                <button className="btn btn-outline-success" onClick={() => setFilter('deferida')}>Deferidas</button>
               </div>
             </div>
-
+            
             <div id="reports-container">
               {filteredPosts.length === 0 ? (
                 <p>Nenhuma denúncia encontrada.</p>
@@ -139,6 +130,14 @@ const Mod = () => {
                     <div className="card-body">
                       <h5 className="card-title">Denúncia #{post.id}</h5>
                       {post.date && <p><strong>Data:</strong> {post.date}</p>}
+                      {post.estado && (
+                        <p className="card-text">
+                          <strong>Condição:</strong>{' '}
+                          <span className={`coral-condition-${post.estado}`}>
+                            {post.estado}
+                          </span>
+                        </p>
+                      )}
                       {post.reporter && (
                         <p className="card-text">
                           <strong>Denunciante:</strong> {post.reporter}
@@ -159,12 +158,9 @@ const Mod = () => {
                           <strong>Temperatura:</strong> {post.temperature}°C
                         </p>
                       )}
-                      {post.coralCondition && (
-                        <p className="card-text">
-                          <strong>Estado dos Corais:</strong>{' '}
-                          <span className={`coral-condition-${post.coralCondition}`}>
-                            {post.coralCondition}
-                          </span>
+                      {post.status && (
+                        <p className='card-text'>
+                          <strong>Estado Físico:</strong> {post.status}
                         </p>
                       )}
                       {post.observations && (
