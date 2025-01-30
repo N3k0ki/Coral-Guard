@@ -27,24 +27,27 @@ const Mod = () => {
 
     fetchPosts();
   }, []);
-
-  const filteredPosts = filter === 'todos'
-    ? postList
-    : postList.filter((post) => post.estado && post.estado.toLowerCase().trim() === filter.toLowerCase());
+  // const filteredPosts = filter === 'todos'
+  //   ? postList
+  //   : postList.filter((post) => post.estado && post.estado.toLowerCase().trim() === (filter === "em análise" ? "em-analise" : filter));
 
   const updateStatus = async (id, newStatus) => {
     try {
       const postRef = doc(db, "coralRecords", id);
-      await updateDoc(postRef, { status: newStatus });
+      await updateDoc(postRef, { estado: newStatus });
 
       const updatedPosts = postList.map((post) =>
-        post.id === id ? { ...post, status: newStatus } : post
+        post.id === id ? { ...post, estado: newStatus } : post // Corrigido aqui
       );
       setPostList(updatedPosts);
     } catch (error) {
       console.error("Erro ao atualizar status:", error);
     }
   };
+
+  const filteredPosts = filter === 'todos'
+    ? postList
+    : postList.filter((post) => post.estado && post.estado.toLowerCase().trim() === filter);
 
   const deletePost = async (id, justification) => {
     try {
@@ -107,7 +110,6 @@ const Mod = () => {
                   Em análise: {postList.filter((post) => post.estado && post.estado.toLowerCase().trim() === 'em análise').length}
                 </p>
                 <p>Deferidas: {postList.filter((r) => r.estado && r.estado.toLowerCase().trim() === 'deferida').length}</p>
-                <p>Indeferidas: {postList.filter((post) => post.estado && post.estado.toLowerCase().trim() === "indeferido").length}</p>
               </div>
             </div>
           </div>
@@ -116,17 +118,17 @@ const Mod = () => {
             <div className="mb-4">
               <div className="btn-group" role="group">
                 <button className="btn btn-outline-primary" onClick={() => setFilter("todos")}>Todos</button>
-                <button className="btn btn-outline-warning" onClick={() => setFilter("em análise")}>Em Análise</button>
+                <button className="btn btn-outline-warning" onClick={() => setFilter("em-analise")}>Em Análise</button>
                 <button className="btn btn-outline-success" onClick={() => setFilter('deferida')}>Deferidas</button>
               </div>
             </div>
-            
+
             <div id="reports-container">
               {filteredPosts.length === 0 ? (
                 <p>Nenhuma denúncia encontrada.</p>
               ) : (
                 filteredPosts.map((post) => (
-                  <div className={`card report-card`} key={post.id}>
+                  <div className="card report-card" key={post.id}>
                     <div className="card-body">
                       <h5 className="card-title">Denúncia #{post.id}</h5>
                       {post.date && <p><strong>Data:</strong> {post.date}</p>}

@@ -14,8 +14,8 @@ export function Inicio({ usuario }) {
   const navigate = useNavigate();
 
   const handleLogout = () => {
-    localStorage.clear(); // Remove o nome do usuário do localStorage
-    navigate('/'); // Redireciona para a tela inicial
+    localStorage.clear();
+    navigate('/');
   };
 
   const handleNavigation = (path) => {
@@ -23,10 +23,9 @@ export function Inicio({ usuario }) {
   };
 
   useEffect(() => {
-    // Recupera o usuário local
     if (usuario && usuario.name) {
       setUsuarioLocal({ name: usuario.name });
-      localStorage.setItem("usuarioNome", usuario.name); // Armazena o nome no localStorage
+      localStorage.setItem("usuarioNome", usuario.name);
     } else {
       const nomeUsuario = localStorage.getItem("usuarioNome");
       if (nomeUsuario) {
@@ -34,7 +33,6 @@ export function Inicio({ usuario }) {
       }
     }
 
-    // Busca posts do Firestore
     const fetchPosts = async () => {
       try {
         const postsCollection = collection(db, "coralRecords");
@@ -42,7 +40,8 @@ export function Inicio({ usuario }) {
         const postsList = snapshot.docs.map((doc) => ({
           id: doc.id,
           ...doc.data(),
-        }));
+        })).filter(post => post.estado === "deferida");
+        
         setPosts(postsList);
       } catch (error) {
         console.error("Erro ao buscar posts:", error);
@@ -52,7 +51,7 @@ export function Inicio({ usuario }) {
     fetchPosts();
   }, [usuario]);
 
-  const nomeUsuario = usuarioLocal.name || "Visitante"; // Nome padrão caso não encontrado
+  const nomeUsuario = usuarioLocal.name || "Visitante";
 
   return (
     <div className="home-body">
@@ -62,9 +61,7 @@ export function Inicio({ usuario }) {
             <img src={logo} alt="Logo Coral Guard" className="src-home" />
             <p className="tag-home">Coral Guard</p>
           </div>
-          <button className="logout-button" onClick={handleLogout}>
-            Logout
-          </button>
+          <button className="logout-button" onClick={handleLogout}>Logout</button>
         </div>
       </header>
 
@@ -72,21 +69,18 @@ export function Inicio({ usuario }) {
       <section className="centered-container">
         <div className="centered-container__item centered-container__item--bold">
           <p className="text-home">
-            <strong>Bem-vindo(a), {usuario.name}!</strong>
+            <strong>Bem-vindo(a), {nomeUsuario}!</strong>
           </p>
         </div>
         <div className="centered-container__item centered-container__item--bordered">
           <p className="text-map">
-            O site ainda está em desenvolvimento. Algumas imagens podem não
-            carregar corretamente, mas estamos trabalhando para resolver isso o
-            mais rápido possível. Obrigado pela compreensão! 😊
+            O site ainda está em desenvolvimento. Algumas imagens podem não carregar corretamente, mas estamos trabalhando para resolver isso o mais rápido possível. Obrigado pela compreensão! 😊
           </p>
         </div>
       </section>
 
       <div className="line-home"></div>
-
-      {/* Exibindo os posts do banco de dados */}
+      
       <section className="posts-section">
         {posts.length > 0 ? (
           posts.map((post) => (
@@ -120,32 +114,17 @@ export function Inicio({ usuario }) {
           <p>Não há postagens ainda.</p>
         )}
       </section>
-
+      
       <footer className="fixed-bar">
-        <div
-          className="icon-link"
-          onClick={() => handleNavigation("/biblioteca")}
-          role="button"
-          tabIndex={0}
-        >
+        <div className="icon-link" onClick={() => handleNavigation("/biblioteca")} role="button" tabIndex={0}>
           <img src={bookIcon} alt="Biblioteca" className="home-img" />
         </div>
 
-        <div
-          className="circle-button"
-          onClick={() => handleNavigation("/post")}
-          role="button"
-          tabIndex={0}
-        >
+        <div className="circle-button" onClick={() => handleNavigation("/post")} role="button" tabIndex={0}>
           <img src={addIcon} alt="Fazer uma postagem" className="home-add" />
         </div>
 
-        <div
-          className="icon-link"
-          onClick={() => handleNavigation("/pagina3")}
-          role="button"
-          tabIndex={0}
-        >
+        <div className="icon-link" onClick={() => handleNavigation("/pagina3")} role="button" tabIndex={0}>
           <img src={profileIcon} alt="Perfil" className="home-img" />
         </div>
       </footer>
