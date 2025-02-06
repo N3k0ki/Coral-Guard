@@ -12,12 +12,20 @@ function Login() {
     useEffect(() => {
         const storedUser = localStorage.getItem('usuario');
         if (storedUser) {
-            navigate('/terms');
+            const confirmar = window.confirm("Você já está logado. Deseja continuar?");
+            if (confirmar) {
+                navigate('/inicio');
+            }
         }
     }, [navigate]);
     
     const handleLogin = async () => {
-        if (usuario.email && usuario.senha) {
+        if (!usuario.email || !usuario.senha) {
+            alert("Por favor, preencha todos os campos");
+            return;
+        }
+    
+        try {
             const referencia = doc(db, 'Usuarios', usuario.email);
             const snapshot = await getDoc(referencia);
     
@@ -28,31 +36,31 @@ function Login() {
     
             const usuarioDb = snapshot.data();
     
-            if (usuarioDb.senha === usuario.senha) {
-                const tipo = usuarioDb.tipo || 'cliente';
-    
-                // Salva o usuário no localStorage
-                localStorage.setItem('usuario', JSON.stringify(usuarioDb));
-    
-                // Redireciona o usuário para a página com base no tipo
-                switch (tipo) {
-                    case 'adm':
-                        navigate('/admin');
-                        break;
-                    case 'mod':
-                        navigate('/mod');
-                        break;
-                    case 'org':
-                        navigate('/organizacoes');
-                        break;
-                    default:
-                        navigate('/inicio');
-                }
-            } else {
+            if (usuarioDb?.senha !== usuario.senha) {
                 alert("Senha incorreta");
+                return;
             }
-        } else {
-            alert("Por favor, preencha todos os campos");
+    
+            // Armazena corretamente no localStorage
+            localStorage.setItem('usuario', JSON.stringify(usuarioDb));
+    
+            // Redireciona conforme o tipo do usuário
+            switch (usuarioDb.tipo || 'cliente') {
+                case 'adm':
+                    navigate('/admin');
+                    break;
+                case 'mod':
+                    navigate('/mod');
+                    break;
+                case 'org':
+                    navigate('/organizacoes');
+                    break;
+                default:
+                    navigate('/inicio');
+            }
+        } catch (error) {
+            console.error("Erro ao fazer login:", error);
+            alert("Erro ao tentar login. Tente novamente.");
         }
     };
 

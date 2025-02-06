@@ -107,7 +107,7 @@ const Mod = () => {
                 <h5>Estatísticas</h5>
                 <p>Total de denúncias: {postList.length}</p>
                 <p>
-                  Em análise: {postList.filter((post) => post.estado && post.estado.toLowerCase().trim() === 'em análise').length}
+                  Em análise: {postList.filter((post) => post.estado && post.estado.toLowerCase().trim() === 'em-analise').length}
                 </p>
                 <p>Deferidas: {postList.filter((r) => r.estado && r.estado.toLowerCase().trim() === 'deferida').length}</p>
               </div>

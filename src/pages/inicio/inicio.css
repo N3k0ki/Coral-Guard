@@ -1,48 +1,92 @@
-* {
+body {
+  background-color: #006cb5 !important;
+  margin: 0;
+  width: 100%;
+  height: 100%;
+  overflow-x: hidden; /* Impede rolagem lateral */
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
-.home-body {
-  background-color: #3476a2;
-  width: 100%;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-}
-
-.header-home {
-  width: 100%;
-}
-
-.container-home {
+.container_nav {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  position: relative;
+  width: 100%;
   padding: 10px;
+  max-width: 100vw; /* Evita que os elementos ultrapassem a largura da tela */
+  overflow: hidden; /* Impede que conteúdos transbordem */
 }
 
-.logo-home {
-  display: flex;
-  align-items: center;
-  padding: 5px;
+.menu-button img {
+  width: 30px;
+  cursor: pointer;
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  z-index: 1001; /* Mantém o botão visível acima de outros elementos */
 }
 
-.src-home {
-  height: 33px;
+/* Menu lateral esquerdo */
+.menu {
+  position: fixed;
+  top: 0;
+  left: -250px; /* Escondido inicialmente */
+  width: 250px;
+  height: 100%;
+  background-color: #2973B2;
+  padding-top: 60px;
+  transition: 0.3s;
+  z-index: 1000;
+}
+
+/* Lista de itens do menu */
+.menu ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.menu li {
+  padding: 15px;
+  text-align: left;
+}
+
+.menu a {
+  text-decoration: none;
+  color: white;
+  font-size: 18px;
+  display: block;
+  transition: 0.3s;
+}
+
+.menu a:hover {
+  background-color: #023e8a;
+  padding-left: 10px;
+}
+
+.logo_container {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.logo_start {
+  height: 50px;
   padding-right: 2px;
+  margin: 10px;
 }
 
-.tag-home {
-  font-size: 22px;
-  color: #fff;
-  font-family: 'Cooper Hewitt', sans-serif;
+.tag_logo {
+  font-size: 20px;
+  color: var(--cor-3);
 }
 
-.line-home {
+.line_white {
   height: 2px;
-  background-color: #13537d;
+  background-color: white;
   width: 100%;
 }
 
@@ -50,8 +94,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 20px 15%;
-  border-radius: 10px;
+
 }
 
 .centered-container__item--bold {
@@ -60,113 +103,109 @@
   margin-bottom: 10px;
 }
 
-.centered-container__item--bordered {
-  padding: 10px 10px;
-  border: 3px solid #13537d;
+.text-bold {
+  font-size: 1em;
+  color: #fff;
+  font-family: 'Poppins', sans-serif;
+}
+
+.post {
+  background-color: #1b7bbc;
+  margin: 30px;
+  border-radius: 16px;
+  max-width: 100vw; /* Evita que os elementos ultrapassem a largura da tela */
+  overflow: hidden; /* Impede que conteúdos transbordem */
+}
+
+.head_post {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.post_img {
+  display: flex;
+}
+
+.profile {
+  margin: 10px;
+  height: 32px;
+}
+
+.points {
+  height: 40px;
+}
+
+.post_user {
+  color: #fff;
+  font-family: 'Poppins', sans-serif;
+}
+
+.text_post {
+  color: #fff;
+  font-family: 'Poppins', sans-serif;
+}
+
+.info_post {
+  margin: 1x;
+  padding: 10px;
+}
+
+.obs {
+  border: 2px solid white;
   border-radius: 10px;
-  background-color: transparent;
-  text-align: center;
 }
 
-.text-home {
-  font-size: 1.5em;
-  color: #fff;
-  font-family: 'Poppins', sans-serif;
-}
-
-.text-map {
-  font-size: 1.2em;
-  padding: 0 0.5em;
-  color: #fff;
-  font-family: 'Poppins', sans-serif;
-}
-
-.fixed-bar {
-  position: fixed;
-  bottom: 0;
-  width: 100%;
-  height: 50px;
-  background-color: #13537d;
-  display: flex;
-  justify-content: space-evenly;
-  align-items: center;
-  padding: 10px 0;
-}
-
-.icon-link img {
-  width: 130%;
-}
-
-.circle-button {
-  width: 80px;
-  height: 80px;
-  background-color: #006cb5;
-  border: 8px solid #13537d;
-  border-radius: 50%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-size: 24px;
-  color: black;
-  text-decoration: none;
-  top: -15px;
-  position: relative;
-}
-
-.home-add {
-  width: 80%;
-}
-
-.posts-section {
-  margin-top: 20px;
-}
-
-.post-card {
-  background-color: white;
-  padding: 15px;
-  margin: 10px 0;
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-}
-
-.post-card h3 {
-  font-size: 18px;
+.obs_post {
   font-weight: bold;
-  color: #005a7e;
+  font-family: 'Poppins', sans-serif;
+  color: white;
 }
 
-.post-card p {
-  font-size: 16px;
-  margin: 5px 0;
+.floating-button {
+  position: fixed;  /* Fixar o botão na tela */
+  bottom: 20px;  /* Distância do fundo */
+  right: 20px;   /* Distância da direita */
+  width: 60px;
+  height: 60px;
+  background-color: #007bff;
+  color: white;
+  font-size: 36px;
+  font-weight: bold;
+  text-align: center;
+  line-height: 60px;
+  border-radius: 50%;
+  text-decoration: none;
+  box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.3);
+  z-index: 9999;  /* Garante que o botão fique sobre os outros elementos */
+  transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
-.post-card strong {
-  color: #005a7e;
+.floating-button:hover {
+  background-color: #0056b3;
+  transform: scale(1.1);
+}
+
+.flex_post{
+  display: flex;
+}
+
+.lista{
+  color: white;
+  font-family: 'Poppins', sans-serif;
 }
 
 .post-image {
-  width: 100%;
-  max-width: 500px;
-  margin-top: 10px;
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  object-fit: cover;
+  width: 100%; /* Ocupa toda a largura do container */
+  max-width: 350px; /* Limita o tamanho máximo da imagem */
+  height: auto; /* Mantém a proporção */
+  display: block;
+  margin: 10px auto; /* Centraliza a imagem */
+  border-radius: 10px; /* Bordas arredondadas para um design mais bonito */
 }
 
-/* Estilos para o Formulário de Upload de Imagem */
-input[type="file"] {
-  margin: 10px 0;
-}
-
-button {
-  background-color: #005a7e;
-  color: white;
-  border: none;
-  padding: 10px 20px;
-  border-radius: 5px;
-  cursor: pointer;
-}
-
-button:hover {
-  background-color: #003d56;
+@media (max-width: 600px) {
+  .post-image {
+    max-width: 90%; /* Em telas menores, a imagem ocupa 90% da largura */
+  }
 }

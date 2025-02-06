@@ -2,20 +2,21 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./inicio.css";
 import logo from "../../assents/logo.svg";
-import bookIcon from "../../assents/book.png";
-import addIcon from "../../assents/adicionar.png";
 import profileIcon from "../../assents/profile.png";
+import opcoes from "../../assents/opcoes.png";
 import { db } from "../../firebase/firebase.js";
 import { collection, getDocs } from "firebase/firestore";
+import menuIcon from "../../assents/cardapio.png"; // Renomeado para evitar conflito de nome
 
 export function Inicio({ usuario }) {
   const [usuarioLocal, setUsuarioLocal] = useState({ name: "" });
   const [posts, setPosts] = useState([]);
+  const [menuOpen, setMenuOpen] = useState(false); // Estado para controlar o menu
   const navigate = useNavigate();
 
   const handleLogout = () => {
-    localStorage.clear();
-    navigate('/');
+    localStorage.removeItem("usuario");
+    navigate("/");
   };
 
   const handleNavigation = (path) => {
@@ -25,11 +26,12 @@ export function Inicio({ usuario }) {
   useEffect(() => {
     if (usuario && usuario.name) {
       setUsuarioLocal({ name: usuario.name });
-      localStorage.setItem("usuarioNome", usuario.name);
+      localStorage.setItem("usuario", JSON.stringify(usuario));
     } else {
-      const nomeUsuario = localStorage.getItem("usuarioNome");
-      if (nomeUsuario) {
-        setUsuarioLocal({ name: nomeUsuario });
+      const usuarioSalvo = localStorage.getItem("usuario");
+      if (usuarioSalvo) {
+        const usuarioObjeto = JSON.parse(usuarioSalvo);
+        setUsuarioLocal({ name: usuarioObjeto.name || "Visitante" });
       }
     }
 
@@ -37,11 +39,13 @@ export function Inicio({ usuario }) {
       try {
         const postsCollection = collection(db, "coralRecords");
         const snapshot = await getDocs(postsCollection);
-        const postsList = snapshot.docs.map((doc) => ({
-          id: doc.id,
-          ...doc.data(),
-        })).filter(post => post.estado === "deferida");
-        
+        const postsList = snapshot.docs
+          .map((doc) => ({
+            id: doc.id,
+            ...doc.data(),
+          }))
+          .filter((post) => post.estado === "deferida");
+
         setPosts(postsList);
       } catch (error) {
         console.error("Erro ao buscar posts:", error);
@@ -54,81 +58,97 @@ export function Inicio({ usuario }) {
   const nomeUsuario = usuarioLocal.name || "Visitante";
 
   return (
-    <div className="home-body">
-      <header className="header-home">
-        <div className="container-home">
-          <div className="logo-home">
-            <img src={logo} alt="Logo Coral Guard" className="src-home" />
-            <p className="tag-home">Coral Guard</p>
+    <body>
+      <header>
+        <div className="container_nav">
+          <div
+            className="menu-button"
+            onClick={() => setMenuOpen(!menuOpen)} // Alterna o menu
+          >
+            <img src={menuIcon} alt="Abrir menu" />
           </div>
-          <button className="logout-button" onClick={handleLogout}>Logout</button>
-        </div>
-      </header>
 
-      <div className="line-home"></div>
+          <nav
+            className="menu"
+            style={{ left: menuOpen ? "0px" : "-250px", transition: "left 0.3s" }}
+          >
+            <ul>
+              <li>
+                <p className="lista" onClick={() => handleNavigation("/")}>Introdução</p>
+              </li>
+              <li>
+                <p className="lista" onClick={() => handleNavigation("/")}>Biblioteca</p>
+              </li>
+              <li>
+                <p className="lista" onClick={() => handleNavigation("/")}>Acesso Restrito</p>
+              </li>
+              <li>
+                <p className="lista" onClick={() => handleNavigation("/")}>Perfil</p>
+              </li>
+              <li>
+                <p className="lista" onClick={handleLogout}>Sair</p>
+              </li>
+            </ul>
+          </nav>
+
+          <div className="logo-container">
+            <img className="logo_start" src={logo} alt="logo coral guard" />
+          </div>
+        </div>
+        <div className="line_white"></div>
+      </header>
       <section className="centered-container">
         <div className="centered-container__item centered-container__item--bold">
           <p className="text-home">
-            <strong>Bem-vindo(a), {nomeUsuario}!</strong>
-          </p>
-        </div>
-        <div className="centered-container__item centered-container__item--bordered">
-          <p className="text-map">
-            O site ainda está em desenvolvimento. Algumas imagens podem não carregar corretamente, mas estamos trabalhando para resolver isso o mais rápido possível. Obrigado pela compreensão! 😊
+            <strong className="text-bold">Bem-vindo(a), {nomeUsuario}!</strong>
           </p>
         </div>
       </section>
-
-      <div className="line-home"></div>
-      
-      <section className="posts-section">
+      <section className="container_post">
         {posts.length > 0 ? (
           posts.map((post) => (
-            <div key={post.id} className="post-card">
-              <h3>{post.date}</h3>
-              <p>
-                <strong>Localização:</strong> {post.location}
-              </p>
-              <p>
-                <strong>Ponto de Referência:</strong> {post.reference}
-              </p>
-              <p>
-                <strong>Temperatura:</strong> {post.temperature}°C
-              </p>
-              <p>
-                <strong>Estado Físico:</strong> {post.status}
-              </p>
-              <p>
-                <strong>Observações:</strong> {post.observations}
-              </p>
-              {post.imageUrl && (
-                <img
-                  src={post.imageUrl}
-                  alt="Imagem do coral"
-                  className="post-image"
-                />
-              )}
+            <div className="post" key={post.id}>
+              <div className="head_post">
+                <div className="post_img">
+                  <img className="profile" src={profileIcon} alt="perfil do usuário" />
+                  <p className="post_user">Usuário</p>
+                </div>
+                <div className="more_post">
+                  <img className="points" src={opcoes} alt="menu" />
+                </div>
+              </div>
+              <div className="line_white"></div>
+              <div className="info_post">
+                <div className="flex_post">
+                  <p className="text_post">Data:</p> {post.date}
+                </div>
+                <div className="flex_post">
+                  <p className="text_post">Localização:</p> {post.location}
+                </div>
+                <div className="flex_post">
+                  <p className="text_post">Estado Físico:</p> {post.status}
+                </div>
+                <div className="flex_post">
+                  <p className="text_post">Temperatura:</p> {post.temperature}°C
+                </div>
+                <div className="flex_post">
+                  <p className="text_post">Ponto de referência:</p> {post.reference}
+                </div>
+                {post.imageUrl && (
+                  <img src={post.imageUrl} alt="Imagem do coral" className="post-image" />
+                )}
+                <p className="obs_post">• Observações</p>
+                <div className="obs">
+                  <p className="text_post">{post.observations}</p>
+                </div>
+              </div>
             </div>
           ))
         ) : (
           <p>Não há postagens ainda.</p>
         )}
       </section>
-      
-      <footer className="fixed-bar">
-        <div className="icon-link" onClick={() => handleNavigation("/biblioteca")} role="button" tabIndex={0}>
-          <img src={bookIcon} alt="Biblioteca" className="home-img" />
-        </div>
-
-        <div className="circle-button" onClick={() => handleNavigation("/post")} role="button" tabIndex={0}>
-          <img src={addIcon} alt="Fazer uma postagem" className="home-add" />
-        </div>
-
-        <div className="icon-link" onClick={() => handleNavigation("/pagina3")} role="button" tabIndex={0}>
-          <img src={profileIcon} alt="Perfil" className="home-img" />
-        </div>
-      </footer>
-    </div>
+    </body>
   );
 }
 
