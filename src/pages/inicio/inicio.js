@@ -77,10 +77,10 @@ export function Inicio({ usuario }) {
                 <p className="lista" onClick={() => handleNavigation("/")}>Introdução</p>
               </li>
               <li>
-                <p className="lista" onClick={() => handleNavigation("/")}>Biblioteca</p>
+                <p className="lista" onClick={() => handleNavigation("/biblioteca")}>Biblioteca</p>
               </li>
               <li>
-                <p className="lista" onClick={() => handleNavigation("/")}>Acesso Restrito</p>
+                <p className="lista" onClick={() => handleNavigation("/admin")}>Acesso Restrito</p>
               </li>
               <li>
                 <p className="lista" onClick={() => handleNavigation("/")}>Perfil</p>
