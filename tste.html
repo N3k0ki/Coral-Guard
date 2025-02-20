@@ -1,240 +1,109 @@
 <!DOCTYPE html>
-<html lang="pt">
+<html lang="pt-BR">
 
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Coral Guard</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <title>Acesso Restrito</title>
   <style>
     body {
       font-family: Arial, sans-serif;
-      background-color: #dbeafe;
+      background-color: #0072bb;
+      color: white;
       text-align: center;
       margin: 0;
-    }
-
-    header {
-      background-color: #bfdbfe;
-      padding: 15px;
-      font-size: 1.5em;
-      font-weight: bold;
-      color: #1e3a8a;
+      padding: 0;
     }
 
     .container {
-      position: relative;
-      background: url('./src/assents/intro.jpg') no-repeat center center;
-      background-size: cover;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      padding-bottom: 50px;
+      padding: 20px;
     }
 
-    .button {
+    .header {
       display: flex;
       align-items: center;
-      justify-content: center;
-      width: 90%;
-      max-width: 300px;
+      padding: 10px;
+    }
+
+    .header img {
+      width: 40px;
+      height: 40px;
+      margin-right: auto;
+    }
+
+    .logo {
+      width: 60px;
       margin: 10px auto;
-      padding: 10px;
-      background-color: #3b82f6;
-      color: white;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      font-size: 1em;
-      position: relative;
     }
 
-    .button i {
-      margin-right: 10px;
+    .title {
+      font-size: 24px;
+      font-weight: bold;
+      margin: 20px 0;
     }
 
-    .text-content {
-      max-height: 0;
-      overflow: hidden;
-      transition: max-height 0.5s ease-in-out, padding 0.5s ease-in-out;
-      background: #3c8bf1;
-      color: #fff;
-      margin-top: 0;
-      padding: 0 10px;
+    .card {
+      background-color: #186ba0;
+      padding: 15px;
+      border-radius: 10px;
+      margin: 10px auto;
       width: 80%;
-      max-width: 300px;
-      border-radius: 5px;
-      opacity: 0;
-      transform: translateY(-10px);
+      text-align: left;
     }
 
-    .text-content.show {
-      max-height: 200px;
-      padding: 10px;
-      opacity: 1;
-      transform: translateY(0);
+    .card h2 {
+      font-size: 18px;
+      margin: 0;
     }
 
-    .library-section {
-      background-color: #1e40af;
+    .card a {
       color: white;
-      padding: 50px 20px;
-      position: relative;
-      z-index: 1;
+      text-decoration: underline;
+      display: block;
+      margin-top: 5px;
     }
 
-    .library-section p {
-      margin: 10px 0;
-    }
-
-    .explore-button {
-      background-color: #93c5fd;
-      color: #1e3a8a;
-      font-weight: bold;
-      padding: 10px 20px;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      margin-top: 10px;
-    }
-
-    h2 {
-      color: white;
-    }
-
-    .white {
+    .line-white {
+      width: 100%;
+      height: 1px;
+      /* Ajuste a espessura conforme necessário */
       background-color: white;
+      margin: 16px 0;
     }
 
-    .library-section {
-      background-color: #084582;
-    }
-
-    .explore {
-      color: #0fc7f8;
-    }
-
-    .explore-button {
-      background-color: #fff;
-      color: #0fc7f8;
-      border-radius: 16px;
-    }
-
-
-
-
-    /*  */
-    .intro {
-      background-color: #fff;
-      padding: 30px;
-      font-size: 1.2em;
-      font-weight: bold;
-      color: #1e3a8a;
-    }
-
-    .about-section {
-      background: url('./src/assents/ocean.jpg') no-repeat center center;
-      background-size: cover;
-      padding: 50px 20px;
+    .x{
+      text-decoration: none;
       color: white;
-      text-align: center;
+      font-weight: bold;
+      font-size: 30px;
+      padding: 16px;
     }
 
- 
-        .info-card {
-            background-color: rgba(75, 115, 247, 0.589);
-            padding: 20px;
-            border-radius: 15px;
-            max-width: 500px;
-            margin: auto;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            text-align: left;
-            position: relative;
-            border: 2px solid white;
-        }
-        .info-card img {
-            width: 100%;
-            border-radius: 10px;
-        }
-        .info-text {
-            padding: 20px;
-            color: white;
-        }
+    .logo{
+      position: relative;
+      margin-top: -6em;
+    }
   </style>
 </head>
 
 <body>
-  <header class="white">
-    <i class="fas fa-anchor"></i> Coral Guard
-  </header>
-
+  <div class="header">
+    <a href="#" class="x">X</a>
+  </div>
+  <img src="./src/assents/logo.svg" alt="Logo" class="logo">
+  <div class="title">Acesso restrito:</div>
   <div class="container">
-    <h2>Entenda</h2>
-    <button class="button" onclick="toggleText('text1')"><i class="fas fa-anchor"></i> O que é o coral guard?</button>
-    <div id="text1" class="text-content">Coral Guard é um projeto dedicado à proteção e estudo dos corais.</div>
-
-    <button class="button" onclick="toggleText('text2')"><i class="fas fa-question-circle"></i> O que são
-      corais?</button>
-    <div id="text2" class="text-content">Os corais são estruturas essenciais para os ecossistemas marinhos, fornecendo
-      abrigo e alimento para diversas espécies. No entanto, são sensíveis a mudanças ambientais, tornando-se vulneráveis
-      ao aquecimento global e à poluição. Sua preservação é crucial para a biodiversidade e para comunidades costeiras
-      que dependem deles.
+    <div class="card">
+      <h2>ORG</h2>
+      <a href="#">Adicionar a biblioteca</a>
+      <div class="line-white"></div>
+      <h2>MODERAÇÃO</h2>
+      <a href="#">Análises de Post</a>
+      <div class="line-white"></div>
+      <h2>ADMINISTRAÇÃO</h2>
+      <a href="#">Gerenciar usuários</a>
     </div>
-
-    <button class="button" onclick="toggleText('text3')"><i class="fas fa-exclamation-triangle"></i> Problema</button>
-    <div id="text3" class="text-content">O branqueamento dos corais ocorre devido ao aumento da temperatura dos oceanos,
-      poluição e acidificação das águas, levando à morte dos recifes e à perda de vida marinha. Isso afeta gravemente o
-      turismo e a economia das comunidades costeiras.</div>
-
-    <button class="button" onclick="toggleText('text4')"><i class="fas fa-chart-bar"></i> O branqueamento</button>
-    <div id="text4" class="text-content">25% das espécies marinhas dependem dos corais para sobreviver.
-      54% dos corais já estão mortos, e até 2030 esse número pode chegar a 70% se nada for feito.
-      As algas marinhas produzem mais de 50% do oxigênio que respiramos.
-    </div>
-
-    <button class="button" onclick="toggleText('text5')"><i class="fas fa-star"></i> Solução</button>
-    <div id="text5" class="text-content">A conscientização é essencial para combater o branqueamento dos corais.
-      Educação, campanhas educativas, turismo responsável e redução da pegada de carbono são fundamentais. Além disso, a
-      colaboração entre organizações e governos é necessária para implementar políticas que protejam e regenerem os
-      recifes, preservando os oceanos e a vida marinha.</div>
-
   </div>
-
-  <div class="library-section">
-    <h2>Conheça a biblioteca coral guard</h2>
-    <p>Descubra tudo sobre os corais! Nossa biblioteca oferece guias educativos, artigos científicos, vídeos e
-      ferramentas interativas para você aprender de forma envolvente.</p>
-    <pv class="explore"><strong>Explore conteúdos sobre conservação marinha e torne-se um guardião dos corais!</strong>
-      </p>
-      <button class="explore-button">Explorar Biblioteca</button>
-  </div>
-
-  <div class="intro">
-    Há muito o que explorar com o Coral Guard
-  </div>
-
-  <div class="about-section">
-    <h2>Nos conheça!</h2>
-    <div class="info-card">
-        <img src="cloud.png" alt="Ilustração de nuvem">
-        <div class="info-text">
-            <p>Somos a DNA Bots, uma equipe de robótica de Betim, MG. Formada por alunos do 8º ao 1º ano do ensino médio. Participantes da FLLC (First Lego League Challenge) uma competição com o objetivo de usarmos ciência e tecnologia para resolver problemas reais.</p>
-            <p>Nosso projeto busca conscientizar sobre o branqueamento de corais, incentivando a preservação desses ecossistemas. É também o mapeamento desses corais no processo de branqueamento, promovendo educação ambiental e colaboração.</p>
-        </div>
-    </div>
-</div>
-  <script>
-    function toggleText(id) {
-      var text = document.getElementById(id);
-      if (text.classList.contains('show')) {
-        text.classList.remove('show');
-      } else {
-        document.querySelectorAll('.text-content').forEach(el => el.classList.remove('show'));
-        text.classList.add('show');
-      }
-    }
-  </script>
 </body>
 
 </html>
