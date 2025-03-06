@@ -1,0 +1,77 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #0072bb;
+    color: white;
+    text-align: center;
+    margin: 0;
+    padding: 0;
+  }
+
+  .container {
+    padding: 20px;
+  }
+
+  .header {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+  }
+
+  .header img {
+    width: 40px;
+    height: 40px;
+    margin-right: auto;
+  }
+
+  .logo {
+    width: 60px;
+    margin: 10px auto;
+  }
+
+  .title {
+    font-size: 24px;
+    font-weight: bold;
+    margin: 20px 0;
+  }
+
+  .card {
+    background-color: #186ba0;
+    padding: 15px;
+    border-radius: 10px;
+    margin: 10px auto;
+    width: 80%;
+    text-align: left;
+  }
+
+  .card h2 {
+    font-size: 18px;
+    margin: 0;
+  }
+
+  .card a {
+    color: white;
+    text-decoration: underline;
+    display: block;
+    margin-top: 5px;
+  }
+
+  .line-white {
+    width: 100%;
+    height: 1px;
+    /* Ajuste a espessura conforme necessário */
+    background-color: white;
+    margin: 16px 0;
+  }
+
+  .x{
+    text-decoration: none;
+    color: white;
+    font-weight: bold;
+    font-size: 30px;
+    padding: 16px;
+  }
+
+  .logo{
+    position: relative;
+    margin-top: -6em;
+  }
