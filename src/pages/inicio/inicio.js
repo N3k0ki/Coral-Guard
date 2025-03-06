@@ -80,17 +80,14 @@ export function Inicio({ usuario }) {
                 <p className="lista" onClick={() => handleNavigation("/biblioteca")}>Biblioteca</p>
               </li>
               <li>
-                <p className="lista" onClick={() => handleNavigation("/admin")}>Acesso Restrito</p>
-              </li>
-              <li>
-                <p className="lista" onClick={() => handleNavigation("/")}>Perfil</p>
+                <p className="lista" onClick={() => handleNavigation("/private")}>Acesso Restrito</p>
               </li>
               <li>
                 <p className="lista" onClick={handleLogout}>Sair</p>
               </li>
             </ul>
           </nav>
-
+          <p className="warn">O Coral Guard está em desenvolvimento! 🌊🐠 Em breve, teremos mais recursos para ajudar na preservação dos recifes de coral. Fique atento para novidades e junte-se a nós nessa missão! 💙</p>
           <div className="logo-container">
             <img className="logo_start" src={logo} alt="logo coral guard" />
           </div>
@@ -103,50 +100,50 @@ export function Inicio({ usuario }) {
             <strong className="text-bold">Bem-vindo(a), {nomeUsuario}!</strong>
           </p>
         </div>
-      </section>
-      <section className="container_post">
-        {posts.length > 0 ? (
-          posts.map((post) => (
-            <div className="post" key={post.id}>
-              <div className="head_post">
-                <div className="post_img">
-                  <img className="profile" src={profileIcon} alt="perfil do usuário" />
-                  <p className="post_user">Usuário</p>
+        <section className="container_post">
+          {posts.length > 0 ? (
+            posts.map((post) => (
+              <div className="post" key={post.id}>
+                <div className="head_post">
+                  <div className="post_img">
+                    <img className="profile" src={profileIcon} alt="perfil do usuário" />
+                    <p className="post_user">Usuário</p>
+                  </div>
+                  <div className="more_post">
+                    <img className="points" src={opcoes} alt="menu" />
+                  </div>
                 </div>
-                <div className="more_post">
-                  <img className="points" src={opcoes} alt="menu" />
+                <div className="line_white"></div>
+                <div className="info_post">
+                  <div className="flex_post">
+                    <p className="text_post">Data: {post.date}</p> 
+                  </div>
+                  <div className="flex_post">
+                    <p className="text_post">Localização: {post.location}</p> 
+                  </div>
+                  <div className="flex_post">
+                    <p className="text_post">Estado Físico: {post.status}</p> 
+                  </div>
+                  <div className="flex_post">
+                    <p className="text_post">Temperatura: {post.temperature}°C</p> 
+                  </div>
+                  <div className="flex_post">
+                    <p className="text_post">Ponto de referência: {post.reference}</p> 
+                  </div>
+                  {post.imageUrl && (
+                    <img src={post.imageUrl} alt="Imagem do coral" className="post-image" />
+                  )}
+                  <p className="obs_post">• Observações</p>
+                  <div className="obs">
+                    <p className="text_post">{post.observations}</p>
+                  </div>
                 </div>
               </div>
-              <div className="line_white"></div>
-              <div className="info_post">
-                <div className="flex_post">
-                  <p className="text_post">Data:</p> {post.date}
-                </div>
-                <div className="flex_post">
-                  <p className="text_post">Localização:</p> {post.location}
-                </div>
-                <div className="flex_post">
-                  <p className="text_post">Estado Físico:</p> {post.status}
-                </div>
-                <div className="flex_post">
-                  <p className="text_post">Temperatura:</p> {post.temperature}°C
-                </div>
-                <div className="flex_post">
-                  <p className="text_post">Ponto de referência:</p> {post.reference}
-                </div>
-                {post.imageUrl && (
-                  <img src={post.imageUrl} alt="Imagem do coral" className="post-image" />
-                )}
-                <p className="obs_post">• Observações</p>
-                <div className="obs">
-                  <p className="text_post">{post.observations}</p>
-                </div>
-              </div>
-            </div>
-          ))
-        ) : (
-          <p>Não há postagens ainda.</p>
-        )}
+            ))
+          ) : (
+            <p>Não há postagens ainda.</p>
+          )}
+        </section>
       </section>
     </body>
   );

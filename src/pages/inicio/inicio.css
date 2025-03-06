@@ -1,5 +1,5 @@
 body {
-  background-color: #006cb5 !important;
+  background: linear-gradient(to top,#003f75 , #006cb5) no-repeat !important;
   margin: 0;
   width: 100%;
   height: 100%;
@@ -109,12 +109,15 @@ body {
   font-family: 'Poppins', sans-serif;
 }
 
+
 .post {
   background-color: #1b7bbc;
   margin: 30px;
   border-radius: 16px;
   max-width: 100vw; /* Evita que os elementos ultrapassem a largura da tela */
   overflow: hidden; /* Impede que conteúdos transbordem */
+  display: inline-block;
+  justify-content: center;
 }
 
 .head_post {
@@ -204,8 +207,16 @@ body {
   border-radius: 10px; /* Bordas arredondadas para um design mais bonito */
 }
 
-@media (max-width: 600px) {
+.warn{
+  width: 80%;
+}
+@media (min-width: 600px) {
   .post-image {
-    max-width: 90%; /* Em telas menores, a imagem ocupa 90% da largura */
+    max-width: 50%; /* Em telas menores, a imagem ocupa 90% da largura */
+  }
+  .container_post{
+    width: 50%;
+    align-items: center;
   }
 }
+
