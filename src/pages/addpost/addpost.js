@@ -5,8 +5,36 @@ import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { doc, setDoc, getDoc } from "firebase/firestore";
 import { db } from "../../firebase/firebase.js";
 import "./addpost.css";
+import { LoadScript, StandaloneSearchBox } from "@react-google-maps/api";
+import { useRef } from "react";
 
-function CoralForm() {
+function CoralForm({ onPlaceSelect }) {
+  const GOOGLE_MAPS_API_KEY = "AIzaSyA7e5VawOzJRv5Kyjb7fs-ihaoTQql25nc"
+
+  const [searchBox, setSearchBox] = useState(null);
+  const inputRef = useRef(null);
+
+  const handleLoad = (ref) => {
+    setSearchBox(ref);
+  };
+
+  const handlePlacesChanged = () => {
+    if (searchBox) {
+      const places = searchBox.getPlaces();
+      if (places.length > 0) {
+        const place = places[0];
+        const locationData = {
+          name: place.name,
+          address: place.formatted_address,
+          latitude: place.geometry.location.lat(),
+          longitude: place.geometry.location.lng(),
+        };
+
+        onPlaceSelect(locationData);
+      }
+    }
+  };
+
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     date: "",
@@ -132,19 +160,27 @@ function CoralForm() {
             required
           />
         </div>
-
-        {/* Localização */}
-        <div className="form-group coral-form-group">
-          <label htmlFor="location" className="form-label">Localização</label>
-          <input
-            type="text"
-            id="location"
-            className="form-input"
-            value={formData.location}
-            onChange={handleInputChange}
-            required
-          />
-        </div>
+        <div className="form-group coral-form-group"><label htmlFor="location" className="form-label">Localização</label></div>
+        
+        <LoadScript googleMapsApiKey={GOOGLE_MAPS_API_KEY} libraries={["places"]}>
+          <StandaloneSearchBox onLoad={handleLoad} onPlacesChanged={handlePlacesChanged}>
+            <input
+              ref={inputRef}
+              type="text"
+              placeholder="Digite um local..."
+              className="form-input"
+              
+              style={{
+                width: "100%",
+                padding: "12px",
+                fontSize: "16px",
+                borderRadius: "8px",
+                border: "2px solid #1a4b77",
+                margin: "10px",
+              }}
+            />
+          </StandaloneSearchBox>
+        </LoadScript> 
 
         {/* Ponto de Referência */}
         <div className="form-group coral-form-group">

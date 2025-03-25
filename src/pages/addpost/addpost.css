@@ -7,8 +7,8 @@
 
 .coral-form-container {
     background: linear-gradient(135deg, var(--primary-blue), var(--secondary-blue));
-    min-height: 100vh;
     padding: 20px;
+    max-width: 100% !important;
     display: flex;
     justify-content: center;
     align-items: center;
